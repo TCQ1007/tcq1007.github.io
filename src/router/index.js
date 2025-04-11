@@ -29,21 +29,19 @@ export const router = createRouter({
   routes,
 });
 
-
-
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  // if (to.path === "/login") {
-  //   if (keycloakInstance.authenticated) {
-  //     next("/");
-  //   } else {
-  //     next();
-  //   }
-  // } else if (!keycloakInstance.authenticated && to.path !== "/login") {
-  //   next("/login");
-  // } else {
+  if (to.path === "/login") {
+    if (keycloakInstance.authenticated) {
+      next("/");
+    } else {
+      next();
+    }
+  } else if (!keycloakInstance.authenticated && to.path !== "/login") {
+    next("/login");
+  } else {
     next();
-  // }
+  }
 });
 router.afterEach(() => {
   NProgress.done();

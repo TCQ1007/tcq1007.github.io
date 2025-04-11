@@ -11,18 +11,15 @@
                 </div>
             </div>
         </el-aside>
-        <el-container>
-            <el-header style="background-color: #f88b8d;">
-                <Header />
+        <el-container style="background-color: #f9e8b4;">
+            <el-header style="margin-top: 15px;">
+                <Header style="background-color: #f88b8d; "/>
             </el-header>
-            <el-main style="background-color: #f9e8b4;"><router-view /></el-main>
+            <el-main ><router-view /></el-main>
         </el-container>
 
         <el-dialog v-model="dialogVisible" :modal="false">
-
-            
             <ApplicationSetting />
-            
             <template #footer>
                 <div class="dialog-footer">
                     <el-button @click="dialogVisible = false">Cancel</el-button>

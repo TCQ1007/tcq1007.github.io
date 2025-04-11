@@ -14,7 +14,11 @@ const userStore = useUserStore();
 
 <style scoped>
 .header-content {
-    height: 100%;
-    border-bottom: 1px solid #ccc;
+    /* margin-top: 15px; */
+    height: 60px;
+    border-radius: 15px;
+    text-align: center;
+    line-height: 60px;
+
 }
 </style>
