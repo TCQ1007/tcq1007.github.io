@@ -1,7 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
 import MicroApp from "@/components/MicroApp.vue";
 import BaseAppIndex from "@/views/Index.vue";
-import IFrame from "../components/IFrame.vue";
 import Layout from "@/layout/Index.vue";
 import Login from "@/components/login/Login.vue";
 import { keycloakInstance } from "@/utils/keycloakInstance";
