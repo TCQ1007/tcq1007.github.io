@@ -19,11 +19,6 @@ const routes = [
     ],
   },
   {
-    path: "/baidu",
-    name: "baidu",
-    component: IFrame,
-  },
-  {
     path: "/login",
     component: Login,
   },
