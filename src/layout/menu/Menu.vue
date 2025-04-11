@@ -52,8 +52,4 @@ const select = (path) => {
 </script>
 
 <style scoped>
-.el-menu {
-    border-right: none;
-
-}
 </style>

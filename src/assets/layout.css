@@ -1,0 +1,32 @@
+#root-layout {
+    height: 100%;
+    width: 100%;
+
+    --left-side-width: 250px;
+    --left-side-bg-color: rgb(255 126 119);
+    --layout-content-bg-color: #f9e8b4;
+    --layout-header-bg-color: #f88b8d;
+}
+
+.layout-left-side {
+    position: relative;
+    --el-menu-bg-color: #f0544c00;
+    --el-menu-hover-bg-color: none;
+    --el-menu-text-color: #ffffff;
+    --el-menu-active-color: black;
+    background-color: rgb(255 126 119);
+}
+.layout-right-side{
+    background-color: var(--layout-content-bg-color)
+}
+.layout-right-header{
+    margin-top: 15px;
+}
+
+.layout-right-header-wrapper {
+    background-color: var(--layout-header-bg-color); 
+    height: 60px;
+    border-radius: 15px;
+    padding-right: 20px;
+    padding-left: 20px;
+}

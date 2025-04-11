@@ -15,10 +15,8 @@
     <template v-else>
         <!-- 单个菜单项 -->
         <el-menu-item :index="menu.path">
-            <el-icon v-if="menu.icon">
-                <i :class="`el-icon-${menu.icon}`"></i>
-            </el-icon>
-            <span>{{ menu.name }}</span>
+          <!-- <el-icon><setting /></el-icon> -->
+          <span>{{ menu.name }}</span>
         </el-menu-item>
     </template>
 </template>
@@ -32,6 +30,6 @@ const props = defineProps({
 });
 
 defineOptions({
-  name: "MenuItem",
+    name: "MenuItem",
 });
 </script>

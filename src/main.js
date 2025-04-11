@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import './style.css'
+import '@/assets/layout.css'
 import 'nprogress/nprogress.css'
 import 'element-plus/dist/index.css'
 import App from './App.vue'
