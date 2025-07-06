@@ -3,11 +3,11 @@ title: 'Hello World - 我的第一篇博客'
 description: '欢迎来到我的技术博客！这是第一篇文章，介绍了博客的基本功能和未来计划。'
 date: '2025-01-06'
 author: '博客作者'
-tags: ['博客', '介绍', 'Hello World', 'Nuxt Content 3']
+tags: ['博客', '介绍', 'Hello World', 'Nuxt Content 3', 'GitHub Pages']
 category: '技术说明'
 featured: true
 readingTime: 3
-keywords: ['技术博客', 'Nuxt 3', 'Cloudflare Workers']
+keywords: ['技术博客', 'Nuxt 3', 'GitHub Pages']
 ---
 
 # Hello World - 欢迎来到我的技术博客！
@@ -27,7 +27,7 @@ keywords: ['技术博客', 'Nuxt 3', 'Cloudflare Workers']
 ::card{title="核心技术栈" icon="⚡"}
 - **Nuxt 3**: 现代化的 Vue.js 框架
 - **Nuxt Content 3**: 强大的内容管理系统，支持 MDC 语法
-- **Cloudflare Workers**: 全球边缘计算平台
+- **GitHub Pages**: 免费静态网站托管平台
 - **TypeScript**: 类型安全的 JavaScript
 ::
 

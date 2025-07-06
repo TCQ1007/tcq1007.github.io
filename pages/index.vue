@@ -11,10 +11,10 @@
 
       <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1;">
         <h1 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem; background: linear-gradient(45deg, #63b3ed, #68d391, #f6ad55); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-          技术博客
+          TCQ1007 的技术博客
         </h1>
         <p style="font-size: 1.25rem; margin-bottom: 2rem; color: #ffffff; font-weight: 400; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
-          基于 Nuxt 3 和 Cloudflare Workers 的现代化博客平台
+          基于 Nuxt 3 和 GitHub Pages 的现代化博客平台
         </p>
         <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
           <span style="padding: 0.5rem 1rem; background: rgba(99, 179, 237, 0.2); border: 1px solid #63b3ed; border-radius: 20px; font-size: 0.875rem; color: #63b3ed;">
@@ -24,7 +24,7 @@
             ⚡ 高性能
           </span>
           <span style="padding: 0.5rem 1rem; background: rgba(246, 173, 85, 0.2); border: 1px solid #f6ad55; border-radius: 20px; font-size: 0.875rem; color: #f6ad55;">
-            🌍 全球部署
+            🌍 GitHub Pages
           </span>
         </div>
       </div>
@@ -85,7 +85,7 @@
           <article
             v-for="article in filteredArticles"
             :key="article.path"
-            style="background: linear-gradient(145deg, #2d3748, #4a5568); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; border: 1px solid #4a5568; position: relative;"
+            style="background: linear-gradient(145deg, #2d3748, #4a5568); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; border: 1px solid #4a5568; position: relative; display: flex; flex-direction: column; min-height: 400px;"
             @mouseover="$event.currentTarget.style.transform = 'translateY(-4px)'; $event.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.3)'"
             @mouseout="$event.currentTarget.style.transform = 'translateY(0)'; $event.currentTarget.style.boxShadow = 'none'"
           >
@@ -94,7 +94,7 @@
               {{ getCategoryInfo(article.category).icon }} {{ article.category }}
             </div>
 
-            <div style="padding: 2rem;">
+            <div style="padding: 2rem; display: flex; flex-direction: column; height: 100%;">
               <!-- 文章元信息 -->
               <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; font-size: 0.875rem; color: #ffffff; opacity: 0.9;">
                 <span style="display: flex; align-items: center; gap: 0.25rem;">
@@ -118,13 +118,14 @@
               </h3>
 
               <!-- 文章描述 -->
-              <p style="color: #ffffff; margin-bottom: 1.5rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.85;">
+              <p style="color: #ffffff; margin-bottom: 1.5rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.85; flex: 1;">
                 {{ article.description }}
               </p>
 
-              <!-- 标签和阅读链接 -->
-              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+              <!-- 标签和阅读链接 - 固定在底部 -->
+              <div style="margin-top: auto;">
+                <!-- 标签 -->
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
                   <span
                     v-for="tag in article.tags?.slice(0, 3)"
                     :key="tag"
@@ -137,14 +138,17 @@
                   </span>
                 </div>
 
-                <NuxtLink
-                  :to="article.path"
-                  style="color: #63b3ed; font-weight: 600; text-decoration: none; transition: all 0.2s ease; padding: 0.5rem 1rem; border: 1px solid #63b3ed; border-radius: 6px; font-size: 0.875rem;"
-                  @mouseover="$event.target.style.background = '#63b3ed'; $event.target.style.color = '#1a202c'"
-                  @mouseout="$event.target.style.background = 'transparent'; $event.target.style.color = '#63b3ed'"
-                >
-                  阅读全文 →
-                </NuxtLink>
+                <!-- 阅读按钮 -->
+                <div style="text-align: right;">
+                  <NuxtLink
+                    :to="article.path"
+                    style="color: #63b3ed; font-weight: 600; text-decoration: none; transition: all 0.2s ease; padding: 0.5rem 1rem; border: 1px solid #63b3ed; border-radius: 6px; font-size: 0.875rem; display: inline-block;"
+                    @mouseover="$event.target.style.background = '#63b3ed'; $event.target.style.color = '#1a202c'"
+                    @mouseout="$event.target.style.background = 'transparent'; $event.target.style.color = '#63b3ed'"
+                  >
+                    阅读全文 →
+                  </NuxtLink>
+                </div>
               </div>
             </div>
           </article>
@@ -180,19 +184,19 @@
 
 // 设置页面元数据
 useHead({
-  title: '技术博客 - 基于 Nuxt 3 和 Cloudflare Workers',
+  title: 'TCQ1007 的技术博客 - 基于 Nuxt 3 和 GitHub Pages',
   meta: [
     {
       name: 'description',
-      content: '基于 Nuxt 3 和 Cloudflare Workers 的现代化技术博客平台，分享前端开发、全栈技术和云计算相关内容。'
+      content: 'TCQ1007 的技术博客，基于 Nuxt 3 和 GitHub Pages 的现代化技术博客平台，分享前端开发、全栈技术和云计算相关内容。'
     },
     {
       property: 'og:title',
-      content: '技术博客 - 基于 Nuxt 3 和 Cloudflare Workers'
+      content: 'TCQ1007 的技术博客 - 基于 Nuxt 3 和 GitHub Pages'
     },
     {
       property: 'og:description',
-      content: '基于 Nuxt 3 和 Cloudflare Workers 的现代化技术博客平台'
+      content: 'TCQ1007 的技术博客，基于 Nuxt 3 和 GitHub Pages 的现代化技术博客平台'
     },
     {
       property: 'og:type',

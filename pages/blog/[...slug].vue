@@ -75,9 +75,9 @@ if (!article.value && !pending.value) {
 
 // 设置页面元数据
 useHead(() => ({
-  title: article.value ? `${article.value.title} - 技术博客` : '技术博客',
+  title: article.value ? `${article.value.title} - TCQ1007 的技术博客` : 'TCQ1007 的技术博客',
   meta: article.value ? [
-    { name: 'description', content: article.value.description || '技术博客文章' }
+    { name: 'description', content: article.value.description || 'TCQ1007 的技术博客文章' }
   ] : []
 }))
 

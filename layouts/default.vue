@@ -10,7 +10,7 @@
               T
             </div>
             <h1 style="font-size: 1.5rem; font-weight: 700; color: #ffffff; margin: 0;">
-              技术博客
+              Tech Blog
             </h1>
           </div>
         </NuxtLink>
@@ -54,12 +54,12 @@
           <a href="https://content.nuxt.com" target="_blank" style="color: #ffffff; text-decoration: none; transition: color 0.2s ease; opacity: 0.8;" @mouseover="$event.target.style.color = '#68d391'; $event.target.style.opacity = '1'" @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.opacity = '0.8'">
             Nuxt Content
           </a>
-          <a href="https://workers.cloudflare.com" target="_blank" style="color: #ffffff; text-decoration: none; transition: color 0.2s ease; opacity: 0.8;" @mouseover="$event.target.style.color = '#f6ad55'; $event.target.style.opacity = '1'" @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.opacity = '0.8'">
-            Cloudflare Workers
+          <a href="https://pages.github.com" target="_blank" style="color: #ffffff; text-decoration: none; transition: color 0.2s ease; opacity: 0.8;" @mouseover="$event.target.style.color = '#f6ad55'; $event.target.style.opacity = '1'" @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.opacity = '0.8'">
+            GitHub Pages
           </a>
         </div>
         <p style="color: #ffffff; font-size: 0.875rem; margin: 0; opacity: 0.7;">
-          © 2025 技术博客. 基于现代化技术栈构建.
+          © 2025 TCQ1007 的技术博客. 基于现代化技术栈构建.
         </p>
       </div>
     </footer>
@@ -69,17 +69,17 @@
 <script setup>
 // 页面标题设置
 useHead({
-  title: '技术博客',
+  title: 'TCQ1007 的技术博客',
   meta: [
-    { name: 'description', content: '基于 Nuxt 3 和 Cloudflare Workers 的现代化博客平台' },
-    { name: 'keywords', content: 'Nuxt 3, Cloudflare Workers, 技术博客, 现代化, 高性能' },
-    { name: 'author', content: '技术博客团队' },
-    { property: 'og:title', content: '技术博客' },
-    { property: 'og:description', content: '基于 Nuxt 3 和 Cloudflare Workers 的现代化博客平台' },
+    { name: 'description', content: '基于 Nuxt 3 和 GitHub Pages 的现代化博客平台' },
+    { name: 'keywords', content: 'Nuxt 3, GitHub Pages, 技术博客, 现代化, 高性能' },
+    { name: 'author', content: 'TCQ1007' },
+    { property: 'og:title', content: 'TCQ1007 的技术博客' },
+    { property: 'og:description', content: '基于 Nuxt 3 和 GitHub Pages 的现代化博客平台' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: '技术博客' },
-    { name: 'twitter:description', content: '基于 Nuxt 3 和 Cloudflare Workers 的现代化博客平台' }
+    { name: 'twitter:title', content: 'TCQ1007 的技术博客' },
+    { name: 'twitter:description', content: '基于 Nuxt 3 和 GitHub Pages 的现代化博客平台' }
   ],
   link: [
     { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

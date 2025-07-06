@@ -1,9 +1,9 @@
 ---
 title: '项目技术说明文档'
-description: '这是一个基于 Nuxt 3 的现代化全栈 Web 应用项目，专为部署到 Cloudflare Workers 平台而设计。'
+description: '这是一个基于 Nuxt 3 的现代化技术博客项目，专为部署到 GitHub Pages 平台而设计。'
 date: '2025-01-06'
-tags: ['技术文档', 'Nuxt 3', 'Cloudflare Workers', 'Vue 3']
-author: 'Blog Admin'
+tags: ['技术文档', 'Nuxt 3', 'GitHub Pages', 'Vue 3']
+author: 'TCQ1007'
 category: '技术说明'
 ---
 
@@ -11,7 +11,7 @@ category: '技术说明'
 
 ## 项目概述
 
-这是一个基于 **Nuxt 3** 的现代化全栈 Web 应用项目，专为部署到 **Cloudflare Workers** 平台而设计。项目采用了现代化的前端技术栈，支持内容管理和数据库操作功能。
+这是一个基于 **Nuxt 3** 的现代化技术博客项目，专为部署到 **GitHub Pages** 平台而设计。项目采用了现代化的前端技术栈，支持静态生成和内容管理功能。
 
 本文档基于 **Nuxt 3.17.6** 和 **Nuxt Content 3.6.3** 的官方文档编写，确保所有实现都符合最新的最佳实践。
 
@@ -36,24 +36,24 @@ category: '技术说明'
   - 支持事务处理
 
 ### 部署平台
-- **Cloudflare Workers** - 边缘计算平台
-  - 全球分布式部署
-  - 零冷启动时间
-  - 内置 KV 存储支持
+- **GitHub Pages** - 静态网站托管平台
+  - 免费静态网站托管
+  - 自动 CI/CD 部署
+  - 自定义域名支持
 
 ## 项目结构详解
 
 基于 [Nuxt 3 官方目录结构文档](https://nuxt.com/docs/guide/directory-structure)，本项目采用了标准的 Nuxt 3 目录结构：
 
 ```
-cf-workers/blog/
+blog/
 ├── app.vue                 # 应用根组件
 ├── nuxt.config.ts         # Nuxt 配置文件
 ├── content.config.ts      # Nuxt Content 配置文件
-├── wrangler.jsonc         # Cloudflare Workers 配置
+├── .github/workflows/     # GitHub Actions 配置
+│   └── deploy.yml         # 自动部署工作流
 ├── package.json           # 项目依赖配置
 ├── tsconfig.json          # TypeScript 配置
-├── env.d.ts              # 环境类型定义
 ├── content/              # 内容目录
 │   └── blog/             # 博客文章目录
 ├── layouts/              # 布局组件目录
@@ -178,34 +178,70 @@ export default defineContentConfig({
 - **Schema**: 使用 Zod 验证内容结构，确保数据一致性
 - **Type Safety**: 自动生成 TypeScript 类型，提供代码提示
 
-### Cloudflare Workers 配置 (wrangler.jsonc)
+### GitHub Actions 配置 (.github/workflows/deploy.yml)
 
-基于 [Cloudflare Workers 文档](https://developers.cloudflare.com/workers/wrangler/configuration/)：
+基于 [GitHub Pages 部署文档](https://docs.github.com/en/pages/getting-started-with-github-pages)：
 
-```json
-{
-  "name": "<TBD>",                           // 项目名称（待定）
-  "main": "./.output/server/index.mjs",     // Nuxt 构建后的入口文件
-  "compatibility_date": "<TBD>",            // Workers 兼容性日期（待定）
-  "assets": {
-    "binding": "ASSETS",                     // 静态资源绑定名称
-    "directory": "./.output/public/"         // Nuxt 构建后的静态资源目录
-  },
-  "observability": {
-    "enabled": true                          // 启用性能监控和日志
-  }
-}
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build with Nuxt
+        run: npm run build
+        env:
+          NITRO_PRESET: github-pages
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 ```
 
 **配置说明**：
-- `main`: 指向 Nuxt 构建输出的服务端入口文件
-- `assets`: 配置静态资源服务，Nuxt 会自动生成到 `.output/public/`
-- `compatibility_date`: 确保 Workers 运行时的兼容性
+- `NITRO_PRESET: github-pages`: 配置 Nuxt 为 GitHub Pages 静态生成
+- 自动触发：推送到 main 分支时自动部署
+- 权限配置：允许写入 Pages 和使用 ID token
 
 ### TypeScript 配置
 - **根目录 tsconfig.json**: 继承 Nuxt 自动生成的配置
-- **server/tsconfig.json**: 服务端专用 TypeScript 配置
-- **env.d.ts**: 包含 Cloudflare Workers 环境类型定义
+- **严格模式**: 启用所有 TypeScript 严格检查
+- **类型定义**: 自动生成的 Nuxt 和 Content 类型
 
 ## 开发环境设置
 
@@ -384,13 +420,13 @@ export default defineEventHandler(async (event) => {
 - **类型安全**: 基于 schema 的类型推断
 - **查询优化**: 内置查询缓存和索引
 
-### 5. 边缘计算部署
+### 5. 静态网站部署
 
-**Cloudflare Workers 优势**：
-- **全球分布**: 边缘节点就近响应
-- **零冷启动**: V8 隔离器技术
-- **自动扩缩容**: 根据流量自动调整
-- **成本优化**: 按请求计费模式
+**GitHub Pages 优势**：
+- **免费托管**: 公开仓库免费使用
+- **自动部署**: 推送代码自动构建部署
+- **自定义域名**: 支持绑定自定义域名
+- **全球 CDN**: GitHub 的全球内容分发网络
 
 ## 开发工具和最佳实践
 
@@ -457,25 +493,27 @@ npm run preview
     └── robots.txt
 ```
 
-### Cloudflare Workers 部署
+### GitHub Pages 部署
 
-**基于 Wrangler CLI** - [Cloudflare Workers 部署文档](https://content.nuxt.com/docs/deploy/cloudflare-workers)
+**基于 GitHub Actions** - [GitHub Pages 部署文档](https://docs.github.com/en/pages/getting-started-with-github-pages)
 
 ```bash
-# 安装 Wrangler CLI
-npm install -g wrangler
+# 推送代码到 GitHub
+git add .
+git commit -m "Deploy to GitHub Pages"
+git push origin main
 
-# 登录 Cloudflare
-wrangler auth login
-
-# 部署到 Workers
-npx wrangler deploy
+# GitHub Actions 会自动：
+# 1. 检出代码
+# 2. 安装依赖
+# 3. 构建静态文件
+# 4. 部署到 Pages
 ```
 
 **部署配置**：
-- `wrangler.jsonc` 定义部署参数
-- 自动上传 `.output/` 目录内容
-- 支持环境变量和 KV 存储
+- `.github/workflows/deploy.yml` 定义部署流程
+- 自动构建 `.output/public/` 静态文件
+- 支持自定义域名和 HTTPS
 
 ### 环境变量配置
 
@@ -509,16 +547,16 @@ console.log(config.public.apiBase)
 ## 扩展建议
 
 ### 推荐的功能扩展
-1. **用户认证系统**: 集成 Auth0 或 Supabase Auth
-2. **评论系统**: 添加文章评论功能
+1. **用户认证系统**: 集成 GitHub OAuth 或第三方认证
+2. **评论系统**: 添加 GitHub Issues 或 Giscus 评论
 3. **搜索功能**: 实现全文搜索
-4. **缓存策略**: 利用 Cloudflare KV 进行缓存
-5. **监控告警**: 集成 Sentry 或 LogFlare
+4. **缓存策略**: 利用浏览器缓存和 CDN 缓存
+5. **监控告警**: 集成 Google Analytics 或 Plausible
 
 ### 性能优化建议
-1. **图片优化**: 使用 Cloudflare Images 服务
-2. **CDN 加速**: 利用 Cloudflare CDN
-3. **数据库优化**: 实现查询缓存机制
+1. **图片优化**: 使用 WebP/AVIF 格式和懒加载
+2. **CDN 加速**: 利用 GitHub Pages 的全球 CDN
+3. **静态优化**: 预生成所有页面和资源
 4. **代码分割**: 进一步优化包大小
 
 ## 维护和更新
@@ -559,11 +597,11 @@ npm audit fix
 - **性能优化**: 内置缓存和查询优化
 - **开发友好**: Markdown + Vue 组件的混合编写
 
-#### Cloudflare Workers vs 传统服务器
-- **边缘计算**: 全球分布，降低延迟
-- **成本效益**: 按请求计费，无需维护服务器
-- **自动扩容**: 无需配置负载均衡
-- **安全性**: 内置 DDoS 防护和 SSL
+#### GitHub Pages vs 传统服务器
+- **免费托管**: 公开仓库完全免费
+- **自动部署**: 推送代码自动构建部署
+- **全球 CDN**: GitHub 的内容分发网络
+- **安全性**: 自动 HTTPS 和 DDoS 防护
 
 ### 架构设计原则
 
@@ -578,7 +616,7 @@ npm audit fix
 
 - [Nuxt 3 官方文档](https://nuxt.com/docs)
 - [Nuxt Content 3 官方文档](https://content.nuxt.com/docs)
-- [Cloudflare Workers 文档](https://developers.cloudflare.com/workers/)
+- [GitHub Pages 文档](https://docs.github.com/en/pages)
 - [Vue 3 官方文档](https://vuejs.org/)
 - [TypeScript 官方文档](https://www.typescriptlang.org/)
 
@@ -589,7 +627,7 @@ npm audit fix
 1. **启动开发服务器**: 运行 `npm run dev` 查看博客效果
 2. **添加更多文章**: 在 `content/blog/` 目录下创建更多 `.md` 文件
 3. **自定义样式**: 修改组件和样式以符合您的设计需求
-4. **配置部署**: 完善 `wrangler.jsonc` 配置并部署到 Cloudflare Workers
+4. **配置部署**: 推送代码到 GitHub 并启用 Pages 自动部署
 5. **扩展功能**: 添加搜索、评论、分类等高级功能
 
 欢迎来到您的新博客！🎉

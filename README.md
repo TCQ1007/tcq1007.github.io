@@ -1,15 +1,15 @@
-# 技术博客
+# TCQ1007 的技术博客
 
-基于 **Nuxt 3** 和 **Cloudflare Workers** 的现代化博客平台。
+基于 **Nuxt 3** 和 **GitHub Pages** 的现代化博客平台。
 
 ## 特性
 
 - 🚀 **现代化技术栈**: Nuxt 3 + Vue 3 + TypeScript
 - 📝 **内容管理**: 基于 @nuxt/content 的 Markdown 支持
 - 🎨 **响应式设计**: 移动端友好的界面
-- ⚡ **高性能**: Vite 构建 + 边缘计算部署
+- ⚡ **高性能**: Vite 构建 + 静态生成部署
 - 🔍 **SEO 优化**: 自动生成 meta 标签
-- 🌐 **全球部署**: Cloudflare Workers 边缘网络
+- 🌐 **免费部署**: GitHub Pages 静态托管
 
 ## 快速开始
 
