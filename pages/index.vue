@@ -146,16 +146,6 @@
             </div>
 
             <div style="padding: 2rem; display: flex; flex-direction: column; height: 100%;">
-              <!-- 文章元信息 -->
-              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; font-size: 0.875rem; color: #ffffff; opacity: 0.9;">
-                <span style="display: flex; align-items: center; gap: 0.25rem;">
-                  📅 {{ formatDate(article.date) }}
-                </span>
-                <span style="display: flex; align-items: center; gap: 0.25rem;">
-                  👤 {{ article.author || '未知' }}
-                </span>
-              </div>
-
               <!-- 文章标题 -->
               <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff; margin-bottom: 1rem; line-height: 1.4;">
                 <NuxtLink
@@ -168,15 +158,37 @@
                 </NuxtLink>
               </h3>
 
+              <!-- 文章元信息 -->
+              <div style="margin-bottom: 1rem; font-size: 0.875rem; color: #ffffff; opacity: 0.7; line-height: 1.4;">
+                <div style="margin-bottom: 0.25rem;">
+                  📅 {{ formatDate(article.date) }}
+                </div>
+                <div>
+                  👤 {{ article.author || '未知' }}
+                </div>
+              </div>
+
               <!-- 文章描述 -->
               <p style="color: #ffffff; margin-bottom: 1.5rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; opacity: 0.85; flex: 1;">
                 {{ article.description }}
               </p>
 
-              <!-- 标签和阅读链接 - 固定在底部 -->
+              <!-- 底部区域 - 固定在底部 -->
               <div style="margin-top: auto;">
+                <!-- 阅读按钮 -->
+                <div style="text-align: right; margin-bottom: 1rem;">
+                  <NuxtLink
+                    :to="article.path"
+                    style="color: #63b3ed; font-weight: 600; text-decoration: none; transition: all 0.2s ease; padding: 0.5rem 1rem; border: 1px solid #63b3ed; border-radius: 6px; font-size: 0.875rem; display: inline-block;"
+                    @mouseover="$event.target.style.background = '#63b3ed'; $event.target.style.color = '#1a202c'"
+                    @mouseout="$event.target.style.background = 'transparent'; $event.target.style.color = '#63b3ed'"
+                  >
+                    阅读全文 →
+                  </NuxtLink>
+                </div>
+
                 <!-- 标签 -->
-                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
                   <span
                     v-for="tag in article.tags?.slice(0, 3)"
                     :key="tag"
@@ -187,18 +199,6 @@
                   <span v-if="article.tags?.length > 3" style="padding: 0.25rem 0.75rem; background: rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 0.75rem; border-radius: 12px;">
                     +{{ article.tags.length - 3 }}
                   </span>
-                </div>
-
-                <!-- 阅读按钮 -->
-                <div style="text-align: right;">
-                  <NuxtLink
-                    :to="article.path"
-                    style="color: #63b3ed; font-weight: 600; text-decoration: none; transition: all 0.2s ease; padding: 0.5rem 1rem; border: 1px solid #63b3ed; border-radius: 6px; font-size: 0.875rem; display: inline-block;"
-                    @mouseover="$event.target.style.background = '#63b3ed'; $event.target.style.color = '#1a202c'"
-                    @mouseout="$event.target.style.background = 'transparent'; $event.target.style.color = '#63b3ed'"
-                  >
-                    阅读全文 →
-                  </NuxtLink>
                 </div>
               </div>
             </div>
