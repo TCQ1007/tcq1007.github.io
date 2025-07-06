@@ -60,6 +60,25 @@ author: '作者名'
 
 ### 构建部署
 
+#### GitHub Pages 部署
+
+本项目已配置 GitHub Actions 自动部署到 GitHub Pages：
+
+1. **Fork 此仓库** 到您的 GitHub 账户
+2. **启用 Pages**: 在仓库设置中启用 GitHub Pages
+3. **选择部署源**: 选择 "GitHub Actions" 作为部署源
+4. **推送代码**: 推送到 `main` 分支即可自动部署
+
+#### 本地构建
+
+```bash
+# 生成静态文件
+pnpm build
+
+# 预览构建结果
+pnpm preview
+```
+
 ```bash
 # 构建生产版本
 pnpm build
