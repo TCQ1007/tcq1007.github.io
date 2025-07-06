@@ -47,7 +47,7 @@
 
               <h3 style="font-size: 1.25rem; font-weight: 600; color: #111827; margin-bottom: 0.75rem;">
                 <NuxtLink
-                  :to="article._path"
+                  :to="article.path"
                   style="color: inherit; text-decoration: none; transition: color 0.2s ease;"
                   @mouseover="$event.target.style.color = '#2563eb'"
                   @mouseout="$event.target.style.color = '#111827'"
@@ -72,7 +72,7 @@
                 </div>
 
                 <NuxtLink
-                  :to="article._path"
+                  :to="article.path"
                   style="color: #2563eb; font-weight: 500; text-decoration: none; transition: color 0.2s ease;"
                   @mouseover="$event.target.style.color = '#1e40af'"
                   @mouseout="$event.target.style.color = '#2563eb'"
@@ -125,26 +125,33 @@ useHead({
   ]
 })
 
-// 获取博客文章列表
-const { data: apiResponse, pending, error } = await useAsyncData('blog-articles', async () => {
+// 获取博客文章列表 - 使用最新的 Nuxt Content 3 语法
+const { data: articles, pending, error } = await useAsyncData('blog-articles', async () => {
   try {
-    console.log('开始通过 API 查询博客文章...')
+    console.log('开始使用 queryCollection 查询博客文章...')
 
-    // 使用 API 路由获取博客文章
-    const response = await $fetch('/api/blog')
-    console.log('API 响应:', response)
+    // 直接使用 queryCollection 查询博客文章
+    const result = await queryCollection('blog')
+      .order('date', 'DESC')
+      .all()
 
-    return response
+    console.log('queryCollection 查询结果:', result)
+
+    return result || []
   } catch (err) {
-    console.error('API 查询博客文章错误:', err)
+    console.error('queryCollection 查询博客文章错误:', err)
     console.error('错误详情:', err.message)
-    return { success: false, data: [], error: err.message }
-  }
-})
 
-// 从 API 响应中提取文章数据
-const articles = computed(() => {
-  return apiResponse.value?.success ? apiResponse.value.data : []
+    // 如果 queryCollection 失败，回退到 API 方式
+    try {
+      console.log('回退到 API 查询方式...')
+      const response = await $fetch('/api/blog')
+      return response?.success ? response.data : []
+    } catch (apiErr) {
+      console.error('API 查询也失败:', apiErr)
+      return []
+    }
+  }
 })
 
 // 格式化日期的辅助函数

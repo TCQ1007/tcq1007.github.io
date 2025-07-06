@@ -40,8 +40,8 @@
 
       <!-- 文章正文 -->
       <div class="prose prose-lg max-w-none">
-        <!-- 使用 v-html 渲染 Markdown 内容 -->
-        <div v-if="article.body" v-html="renderedContent"></div>
+        <!-- 使用 Nuxt Content 3 的 ContentRenderer 组件 -->
+        <ContentRenderer v-if="article" :value="article" />
         <div v-else>
           <p>文章内容加载中...</p>
         </div>
@@ -94,66 +94,36 @@ const slug = route.params.slug
 // 构建文章路径
 const articlePath = Array.isArray(slug) ? `/blog/${slug.join('/')}` : `/blog/${slug}`
 
-// 获取文章内容
-const { data: apiResponse, pending } = await useAsyncData(`article-${articlePath}`, async () => {
+// 获取文章内容 - 使用最新的 Nuxt Content 3 语法
+const { data: article, pending } = await useAsyncData(`article-${articlePath}`, async () => {
   try {
-    // 使用 API 路由获取文章
-    const response = await $fetch(`/api/blog/${slug}`)
-    console.log('文章 API 响应:', response)
-    return response
+    console.log(`开始使用 queryCollection 查询文章: ${slug}`)
+
+    // 直接使用 queryCollection 查询单篇文章
+    const result = await queryCollection('blog')
+      .path(articlePath)
+      .first()
+
+    console.log('queryCollection 查询文章结果:', result)
+
+    return result
   } catch (err) {
-    console.error('API 查询文章错误:', err)
-    return { success: false, data: null, error: err.message }
+    console.error('queryCollection 查询文章错误:', err)
+    console.error('错误详情:', err.message)
+
+    // 如果 queryCollection 失败，回退到 API 方式
+    try {
+      console.log('回退到 API 查询方式...')
+      const response = await $fetch(`/api/blog/${slug}`)
+      return response?.success ? response.data : null
+    } catch (apiErr) {
+      console.error('API 查询也失败:', apiErr)
+      return null
+    }
   }
 })
 
-// 从 API 响应中提取文章数据
-const article = computed(() => {
-  return apiResponse.value?.success ? apiResponse.value.data : null
-})
-
-// 简单的 Markdown 渲染（基础版本）
-const renderedContent = computed(() => {
-  if (!article.value?.body) return ''
-
-  let html = article.value.body
-
-  // 基础 Markdown 转换
-  // 标题
-  html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>')
-  html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>')
-  html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>')
-
-  // 粗体和斜体
-  html = html.replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-  html = html.replace(/\*(.*)\*/gim, '<em>$1</em>')
-
-  // 代码块
-  html = html.replace(/```(\w+)?\n([\s\S]*?)```/gim, '<pre><code class="language-$1">$2</code></pre>')
-  html = html.replace(/`([^`]+)`/gim, '<code>$1</code>')
-
-  // 链接
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-
-  // 列表
-  html = html.replace(/^\- (.*$)/gim, '<li>$1</li>')
-  html = html.replace(/(<li>.*<\/li>)/gims, '<ul>$1</ul>')
-
-  // 段落
-  html = html.replace(/\n\n/gim, '</p><p>')
-  html = '<p>' + html + '</p>'
-
-  // 清理多余的 p 标签
-  html = html.replace(/<p><\/p>/gim, '')
-  html = html.replace(/<p>(<h[1-6]>)/gim, '$1')
-  html = html.replace(/(<\/h[1-6]>)<\/p>/gim, '$1')
-  html = html.replace(/<p>(<ul>)/gim, '$1')
-  html = html.replace(/(<\/ul>)<\/p>/gim, '$1')
-  html = html.replace(/<p>(<pre>)/gim, '$1')
-  html = html.replace(/(<\/pre>)<\/p>/gim, '$1')
-
-  return html
-})
+// 不再需要自定义 Markdown 渲染器，使用 Nuxt Content 3 的 ContentRenderer
 
 // 如果文章不存在，抛出 404 错误
 if (!article.value && !pending.value) {

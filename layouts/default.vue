@@ -109,6 +109,61 @@
   </div>
 </template>
 
+<style>
+/* 改善代码块的显示效果 */
+pre {
+  background-color: #f8f9fa !important;
+  border: 1px solid #e9ecef !important;
+  border-radius: 6px !important;
+  padding: 1rem !important;
+  overflow-x: auto !important;
+}
+
+code {
+  background-color: #f8f9fa !important;
+  color: #24292e !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 3px !important;
+  font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace !important;
+}
+
+pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  color: #24292e !important;
+}
+
+/* 确保代码块中的文字有足够的对比度 */
+.shiki {
+  background-color: #f8f9fa !important;
+}
+
+.shiki code {
+  color: #24292e !important;
+}
+
+/* 针对不同语法元素的颜色 */
+.shiki .token.keyword {
+  color: #d73a49 !important;
+}
+
+.shiki .token.string {
+  color: #032f62 !important;
+}
+
+.shiki .token.comment {
+  color: #6a737d !important;
+}
+
+.shiki .token.function {
+  color: #6f42c1 !important;
+}
+
+.shiki .token.number {
+  color: #005cc5 !important;
+}
+</style>
+
 <script setup>
 // 移动端菜单状态
 const mobileMenuOpen = ref(false)
