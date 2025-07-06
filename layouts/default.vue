@@ -17,6 +17,71 @@
         
         <!-- 导航链接 -->
         <div style="display: flex; gap: 2rem; align-items: center;">
+          <!-- 搜索框 -->
+          <div style="position: relative;">
+            <input
+              v-model="searchQuery"
+              @input="handleSearch"
+              @focus="showSearchResults = true"
+              @blur="hideSearchResults"
+              placeholder="搜索文章..."
+              style="
+                padding: 0.5rem 1rem 0.5rem 2.5rem;
+                background: rgba(45, 55, 72, 0.8);
+                border: 1px solid #4a5568;
+                border-radius: 20px;
+                color: #ffffff;
+                font-size: 0.875rem;
+                width: 200px;
+                transition: all 0.2s ease;
+              "
+              @mouseover="$event.target.style.borderColor = '#63b3ed'"
+              @mouseout="$event.target.style.borderColor = '#4a5568'"
+            />
+            <div style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #a0aec0; font-size: 0.875rem;">
+              🔍
+            </div>
+
+            <!-- 搜索结果下拉框 -->
+            <div
+              v-if="showSearchResults && searchResults.length > 0"
+              style="
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(26, 32, 44, 0.95);
+                border: 1px solid #4a5568;
+                border-radius: 8px;
+                margin-top: 0.5rem;
+                max-height: 300px;
+                overflow-y: auto;
+                z-index: 1000;
+                backdrop-filter: blur(20px);
+              "
+            >
+              <NuxtLink
+                v-for="result in searchResults.slice(0, 5)"
+                :key="result.path"
+                :to="result.path"
+                @click="clearSearch"
+                style="
+                  display: block;
+                  padding: 0.75rem 1rem;
+                  color: #ffffff;
+                  text-decoration: none;
+                  border-bottom: 1px solid #4a5568;
+                  transition: background 0.2s ease;
+                "
+                @mouseover="$event.target.style.background = 'rgba(99, 179, 237, 0.2)'"
+                @mouseout="$event.target.style.background = 'transparent'"
+              >
+                <div style="font-weight: 600; margin-bottom: 0.25rem;">{{ result.title }}</div>
+                <div style="font-size: 0.75rem; opacity: 0.7;">{{ result.description?.slice(0, 80) }}...</div>
+              </NuxtLink>
+            </div>
+          </div>
+
           <NuxtLink
             to="/"
             style="color: #ffffff; text-decoration: none; font-weight: 500; transition: all 0.2s ease; padding: 0.5rem 1rem; border-radius: 6px;"
@@ -67,6 +132,55 @@
 </template>
 
 <script setup>
+// 搜索功能
+const searchQuery = ref('')
+const searchResults = ref([])
+const showSearchResults = ref(false)
+
+// 获取所有文章用于搜索
+const { data: allArticles } = await useAsyncData('search-articles', async () => {
+  try {
+    const result = await queryCollection('blog').all()
+    return result || []
+  } catch (error) {
+    console.error('获取文章失败:', error)
+    return []
+  }
+})
+
+// 搜索处理函数
+const handleSearch = () => {
+  const query = searchQuery.value.toLowerCase().trim()
+
+  if (!query || !allArticles.value) {
+    searchResults.value = []
+    return
+  }
+
+  searchResults.value = allArticles.value.filter(article => {
+    return (
+      article.title?.toLowerCase().includes(query) ||
+      article.description?.toLowerCase().includes(query) ||
+      article.tags?.some(tag => tag.toLowerCase().includes(query)) ||
+      article.category?.toLowerCase().includes(query)
+    )
+  })
+}
+
+// 清空搜索
+const clearSearch = () => {
+  searchQuery.value = ''
+  searchResults.value = []
+  showSearchResults.value = false
+}
+
+// 延迟隐藏搜索结果，避免点击时立即消失
+const hideSearchResults = () => {
+  setTimeout(() => {
+    showSearchResults.value = false
+  }, 200)
+}
+
 // 页面标题设置
 useHead({
   title: 'TCQ1007 的技术博客',
