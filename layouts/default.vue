@@ -1,350 +1,164 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div style="min-height: 100vh; display: flex; flex-direction: column; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0e27;">
     <!-- 导航栏 -->
-    <nav class="bg-white shadow-sm border-b border-gray-200">
-      <div class="container mx-auto px-4">
-        <div class="flex items-center justify-between h-16">
-          <!-- Logo/标题 -->
-          <div class="flex items-center">
-            <NuxtLink to="/" class="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-200">
+    <nav style="background: rgba(26, 32, 44, 0.95); border-bottom: 1px solid #4a5568; padding: 1rem 0; position: sticky; top: 0; z-index: 50; backdrop-filter: blur(20px);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <!-- Logo -->
+        <NuxtLink to="/" style="text-decoration: none;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div style="width: 32px; height: 32px; background: linear-gradient(45deg, #63b3ed, #68d391); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #1a202c; font-size: 1rem;">
+              T
+            </div>
+            <h1 style="font-size: 1.5rem; font-weight: 700; color: #ffffff; margin: 0;">
               技术博客
-            </NuxtLink>
+            </h1>
           </div>
-          
-          <!-- 导航菜单 -->
-          <div class="hidden md:flex items-center space-x-8">
-            <NuxtLink 
-              to="/" 
-              class="text-gray-600 hover:text-gray-900 transition-colors duration-200"
-              :class="{ 'text-blue-600 font-medium': $route.path === '/' }"
-            >
-              首页
-            </NuxtLink>
-            <a 
-              href="https://github.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="text-gray-600 hover:text-gray-900 transition-colors duration-200"
-            >
-              GitHub
-            </a>
-          </div>
-          
-          <!-- 移动端菜单按钮 -->
-          <div class="md:hidden">
-            <button 
-              @click="toggleMobileMenu"
-              class="text-gray-600 hover:text-gray-900 focus:outline-none focus:text-gray-900 transition-colors duration-200"
-            >
-              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        </NuxtLink>
         
-        <!-- 移动端菜单 -->
-        <div v-if="mobileMenuOpen" class="md:hidden border-t border-gray-200 py-4">
-          <div class="flex flex-col space-y-4">
-            <NuxtLink 
-              to="/" 
-              @click="closeMobileMenu"
-              class="text-gray-600 hover:text-gray-900 transition-colors duration-200"
-              :class="{ 'text-blue-600 font-medium': $route.path === '/' }"
-            >
-              首页
-            </NuxtLink>
-            <a 
-              href="https://github.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              @click="closeMobileMenu"
-              class="text-gray-600 hover:text-gray-900 transition-colors duration-200"
-            >
-              GitHub
-            </a>
-          </div>
+        <!-- 导航链接 -->
+        <div style="display: flex; gap: 2rem; align-items: center;">
+          <NuxtLink
+            to="/"
+            style="color: #ffffff; text-decoration: none; font-weight: 500; transition: all 0.2s ease; padding: 0.5rem 1rem; border-radius: 6px;"
+            @mouseover="$event.target.style.color = '#63b3ed'; $event.target.style.background = 'rgba(99, 179, 237, 0.2)'"
+            @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.background = 'transparent'"
+          >
+            🏠 首页
+          </NuxtLink>
+          <a
+            href="https://github.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="color: #ffffff; text-decoration: none; font-weight: 500; transition: all 0.2s ease; padding: 0.5rem 1rem; border-radius: 6px;"
+            @mouseover="$event.target.style.color = '#68d391'; $event.target.style.background = 'rgba(104, 211, 145, 0.2)'"
+            @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.background = 'transparent'"
+          >
+            💻 GitHub
+          </a>
         </div>
       </div>
     </nav>
 
     <!-- 主要内容区域 -->
-    <main>
-      <slot />
+    <main style="flex: 1;">
+      <NuxtPage />
     </main>
-    
+
     <!-- 页脚 -->
-    <footer class="bg-white border-t border-gray-200 mt-auto">
-      <div class="container mx-auto px-4 py-8">
-        <div class="text-center">
-          <p class="text-gray-600 mb-4">
-            © 2025 技术博客. 基于 
-            <a 
-              href="https://nuxt.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200"
-            >
-              Nuxt 3
-            </a>
-            和 
-            <a 
-              href="https://workers.cloudflare.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200"
-            >
-              Cloudflare Workers
-            </a>
-            构建
-          </p>
-          
-          <div class="flex justify-center items-center space-x-6 text-sm text-gray-500">
-            <span>现代化 • 高性能 • 全球部署</span>
-          </div>
+    <footer style="background: rgba(26, 32, 44, 0.95); border-top: 1px solid #4a5568; padding: 2rem 0; margin-top: auto;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center;">
+        <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; flex-wrap: wrap;">
+          <a href="https://nuxt.com" target="_blank" style="color: #ffffff; text-decoration: none; transition: color 0.2s ease; opacity: 0.8;" @mouseover="$event.target.style.color = '#63b3ed'; $event.target.style.opacity = '1'" @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.opacity = '0.8'">
+            Nuxt 3
+          </a>
+          <a href="https://content.nuxt.com" target="_blank" style="color: #ffffff; text-decoration: none; transition: color 0.2s ease; opacity: 0.8;" @mouseover="$event.target.style.color = '#68d391'; $event.target.style.opacity = '1'" @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.opacity = '0.8'">
+            Nuxt Content
+          </a>
+          <a href="https://workers.cloudflare.com" target="_blank" style="color: #ffffff; text-decoration: none; transition: color 0.2s ease; opacity: 0.8;" @mouseover="$event.target.style.color = '#f6ad55'; $event.target.style.opacity = '1'" @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.opacity = '0.8'">
+            Cloudflare Workers
+          </a>
         </div>
+        <p style="color: #ffffff; font-size: 0.875rem; margin: 0; opacity: 0.7;">
+          © 2025 技术博客. 基于现代化技术栈构建.
+        </p>
       </div>
     </footer>
   </div>
 </template>
 
-<style>
-/* 改善代码块的显示效果 */
-pre {
-  background-color: #f8f9fa !important;
-  border: 1px solid #e9ecef !important;
-  border-radius: 6px !important;
-  padding: 1rem !important;
-  overflow-x: auto !important;
-}
-
-code {
-  background-color: #f8f9fa !important;
-  color: #24292e !important;
-  padding: 0.2em 0.4em !important;
-  border-radius: 3px !important;
-  font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace !important;
-}
-
-pre code {
-  background-color: transparent !important;
-  padding: 0 !important;
-  color: #24292e !important;
-}
-
-/* 确保代码块中的文字有足够的对比度 */
-.shiki {
-  background-color: #f8f9fa !important;
-}
-
-.shiki code {
-  color: #24292e !important;
-}
-
-/* 针对不同语法元素的颜色 */
-.shiki .token.keyword {
-  color: #d73a49 !important;
-}
-
-.shiki .token.string {
-  color: #032f62 !important;
-}
-
-.shiki .token.comment {
-  color: #6a737d !important;
-}
-
-.shiki .token.function {
-  color: #6f42c1 !important;
-}
-
-.shiki .token.number {
-  color: #005cc5 !important;
-}
-</style>
-
 <script setup>
-// 移动端菜单状态
-const mobileMenuOpen = ref(false)
-
-// 切换移动端菜单
-const toggleMobileMenu = () => {
-  mobileMenuOpen.value = !mobileMenuOpen.value
-}
-
-// 关闭移动端菜单
-const closeMobileMenu = () => {
-  mobileMenuOpen.value = false
-}
-
-// 监听路由变化，自动关闭移动端菜单
-const route = useRoute()
-watch(() => route.path, () => {
-  mobileMenuOpen.value = false
-})
-
-// 设置全局页面元数据
+// 页面标题设置
 useHead({
-  htmlAttrs: {
-    lang: 'zh-CN'
-  },
+  title: '技术博客',
   meta: [
-    { charset: 'utf-8' },
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { name: 'format-detection', content: 'telephone=no' }
+    { name: 'description', content: '基于 Nuxt 3 和 Cloudflare Workers 的现代化博客平台' },
+    { name: 'keywords', content: 'Nuxt 3, Cloudflare Workers, 技术博客, 现代化, 高性能' },
+    { name: 'author', content: '技术博客团队' },
+    { property: 'og:title', content: '技术博客' },
+    { property: 'og:description', content: '基于 Nuxt 3 和 Cloudflare Workers 的现代化博客平台' },
+    { property: 'og:type', content: 'website' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: '技术博客' },
+    { name: 'twitter:description', content: '基于 Nuxt 3 和 Cloudflare Workers 的现代化博客平台' }
   ],
   link: [
-    { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap' }
   ]
 })
 </script>
 
 <style>
-/* 全局基础样式 */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* 改善代码块的显示效果 - 适配暗色主题 */
+pre {
+  background-color: #2d3748 !important;
+  border: 1px solid #4a5568 !important;
+  border-radius: 8px !important;
+  padding: 1.5rem !important;
+  overflow-x: auto !important;
 }
 
-html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.6;
-  color: #333;
+code {
+  background-color: rgba(45, 55, 72, 0.8) !important;
+  color: #e2e8f0 !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 4px !important;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace !important;
 }
 
-body {
-  background-color: #f8fafc;
-  min-height: 100vh;
+pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  color: #e2e8f0 !important;
 }
 
-/* 工具类 */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
+/* 确保代码块中的文字有足够的对比度 */
+.shiki {
+  background-color: #2d3748 !important;
 }
 
-.text-center { text-align: center; }
-.font-bold { font-weight: 700; }
-.font-medium { font-weight: 500; }
-
-.text-sm { font-size: 0.875rem; }
-.text-xl { font-size: 1.25rem; }
-
-.text-gray-500 { color: #6b7280; }
-.text-gray-600 { color: #6b7280; }
-.text-gray-900 { color: #111827; }
-.text-blue-600 { color: #2563eb; }
-.text-blue-800 { color: #1e40af; }
-
-.bg-white { background-color: #ffffff; }
-.bg-gray-50 { background-color: #f9fafb; }
-
-.shadow-sm {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+.shiki code {
+  color: #e2e8f0 !important;
 }
 
-.px-4 { padding-left: 1rem; padding-right: 1rem; }
-.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-.py-8 { padding-top: 2rem; padding-bottom: 2rem; }
-
-.mb-4 { margin-bottom: 1rem; }
-.mt-auto { margin-top: auto; }
-
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.items-center { align-items: center; }
-.justify-between { justify-content: space-between; }
-.justify-center { justify-content: center; }
-.space-x-4 > * + * { margin-left: 1rem; }
-.space-x-6 > * + * { margin-left: 1.5rem; }
-.space-x-8 > * + * { margin-left: 2rem; }
-.space-y-4 > * + * { margin-top: 1rem; }
-
-.h-6 { height: 1.5rem; }
-.h-16 { height: 4rem; }
-.w-6 { width: 1.5rem; }
-
-.border-b { border-bottom: 1px solid #e5e7eb; }
-.border-t { border-top: 1px solid #e5e7eb; }
-.border-gray-200 { border-color: #e5e7eb; }
-
-.transition-colors {
-  transition-property: color, background-color, border-color;
-  transition-duration: 200ms;
+/* 针对不同语法元素的颜色 - 暗色主题 */
+.shiki .token.keyword {
+  color: #63b3ed !important;
 }
 
-.hover\:text-blue-600:hover { color: #2563eb; }
-.hover\:text-gray-900:hover { color: #111827; }
-.hover\:text-blue-800:hover { color: #1e40af; }
-.hover\:underline:hover { text-decoration: underline; }
-
-.focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
-.focus\:text-gray-900:focus { color: #111827; }
-
-/* 隐藏/显示类 */
-.hidden { display: none; }
-
-/* 响应式设计 */
-@media (min-width: 768px) {
-  .md\:flex { display: flex; }
-  .md\:hidden { display: none; }
+.shiki .token.string {
+  color: #68d391 !important;
 }
 
-/* 链接样式 */
-a {
-  text-decoration: none;
-  transition: color 0.2s ease;
+.shiki .token.comment {
+  color: #a0aec0 !important;
 }
 
-/* 确保页面最小高度 */
-.min-h-screen {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.shiki .token.function {
+  color: #f6ad55 !important;
 }
 
-main {
-  flex: 1;
+.shiki .token.number {
+  color: #ed64a6 !important;
 }
 
-/* 导航栏样式 */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  backdrop-filter: blur(8px);
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* 活跃链接样式 */
-.router-link-active {
-  color: #2563eb;
-  font-weight: 500;
+::-webkit-scrollbar-track {
+  background: #2d3748;
 }
 
-/* 移动端菜单动画 */
-.mobile-menu-enter-active,
-.mobile-menu-leave-active {
-  transition: all 0.3s ease;
+::-webkit-scrollbar-thumb {
+  background: #4a5568;
+  border-radius: 4px;
 }
 
-.mobile-menu-enter-from,
-.mobile-menu-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-/* 响应式调整 */
-@media (max-width: 768px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .hidden { display: block; }
-  .md\:hidden { display: none; }
-  .md\:flex { display: none; }
+::-webkit-scrollbar-thumb:hover {
+  background: #63b3ed;
 }
 </style>

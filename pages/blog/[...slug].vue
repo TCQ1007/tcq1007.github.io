@@ -1,87 +1,110 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <!-- 返回按钮 -->
-    <div class="mb-8">
-      <NuxtLink 
-        to="/" 
-        class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
-      >
-        ← 返回首页
-      </NuxtLink>
-    </div>
-
-    <!-- 文章内容 -->
-    <article v-if="article" class="max-w-4xl mx-auto">
-      <!-- 文章头部 -->
-      <header class="mb-8 pb-8 border-b border-gray-200">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">
-          {{ article.title }}
-        </h1>
-        
-        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-          <span>发布时间: {{ formatDate(article.date) }}</span>
-          <span v-if="article.author">作者: {{ article.author }}</span>
-        </div>
-        
-        <p v-if="article.description" class="text-xl text-gray-600 leading-relaxed">
-          {{ article.description }}
-        </p>
-        
-        <div v-if="article.tags && article.tags.length > 0" class="flex flex-wrap gap-2 mt-4">
-          <span 
-            v-for="tag in article.tags" 
-            :key="tag"
-            class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
-          >
-            {{ tag }}
-          </span>
-        </div>
-      </header>
-
-      <!-- 文章正文 -->
-      <div class="prose prose-lg max-w-none">
-        <!-- 使用 Nuxt Content 3 的 ContentRenderer 组件 -->
-        <ContentRenderer v-if="article" :value="article" />
-        <div v-else>
-          <p>文章内容加载中...</p>
-        </div>
+  <div style="background: #0a0e27; min-height: 100vh; color: #ffffff;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+      <!-- 返回按钮 -->
+      <div style="margin-bottom: 2rem;">
+        <NuxtLink
+          to="/"
+          style="display: inline-flex; align-items: center; color: #63b3ed; text-decoration: none; font-weight: 500; transition: color 0.2s ease; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #63b3ed;"
+          @mouseover="$event.target.style.background = 'rgba(99, 179, 237, 0.1)'"
+          @mouseout="$event.target.style.background = 'transparent'"
+        >
+          ← 返回首页
+        </NuxtLink>
       </div>
 
-      <!-- 文章底部 -->
-      <footer class="mt-12 pt-8 border-t border-gray-200">
-        <div class="flex items-center justify-between">
-          <div class="text-sm text-gray-600">
-            <p>最后更新: {{ formatDate(article.date) }}</p>
+      <!-- 文章内容 -->
+      <article v-if="article" style="max-width: 56rem; margin: 0 auto;">
+        <!-- 文章头部 -->
+        <header style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #4a5568;">
+          <!-- 分类标签 -->
+          <div v-if="article.category" style="margin-bottom: 1rem;">
+            <span style="padding: 0.5rem 1rem; background: linear-gradient(45deg, #63b3ed, #68d391); color: #1a202c; border-radius: 20px; font-size: 0.875rem; font-weight: 600;">
+              {{ getCategoryInfo(article.category).icon }} {{ article.category }}
+            </span>
           </div>
-          
-          <div class="flex items-center space-x-4">
-            <NuxtLink 
-              to="/" 
-              class="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+
+          <h1 style="font-size: 2.5rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem; line-height: 1.2;">
+            {{ article.title }}
+          </h1>
+
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; font-size: 0.875rem; color: #e2e8f0; margin-bottom: 1rem;">
+            <span style="display: flex; align-items: center; gap: 0.25rem;">
+              📅 {{ formatDate(article.date) }}
+            </span>
+            <span v-if="article.author" style="display: flex; align-items: center; gap: 0.25rem;">
+              👤 {{ article.author }}
+            </span>
+            <span v-if="article.readingTime" style="display: flex; align-items: center; gap: 0.25rem;">
+              ⏱️ {{ article.readingTime }} 分钟阅读
+            </span>
+          </div>
+
+          <p v-if="article.description" style="font-size: 1.125rem; color: #ffffff; line-height: 1.6; opacity: 0.9; margin-bottom: 1.5rem;">
+            {{ article.description }}
+          </p>
+
+          <div v-if="article.tags && article.tags.length > 0" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            <span
+              v-for="tag in article.tags"
+              :key="tag"
+              style="padding: 0.25rem 0.75rem; background: rgba(99, 179, 237, 0.2); color: #63b3ed; font-size: 0.75rem; border-radius: 12px; border: 1px solid rgba(99, 179, 237, 0.3);"
             >
-              查看更多文章
-            </NuxtLink>
+              {{ tag }}
+            </span>
+          </div>
+        </header>
+
+        <!-- 文章正文 -->
+        <div style="max-width: none; color: #ffffff; line-height: 1.75;">
+          <!-- 使用 Nuxt Content 3 的 ContentRenderer 组件 -->
+          <ContentRenderer v-if="article" :value="article" class="content-renderer" />
+          <div v-else style="text-align: center; padding: 2rem 0;">
+            <p style="color: #a0aec0;">文章内容加载中...</p>
           </div>
         </div>
-      </footer>
-    </article>
 
-    <!-- 加载状态 -->
-    <div v-else-if="pending" class="text-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-      <p class="mt-4 text-gray-600">加载中...</p>
-    </div>
+        <!-- 文章底部 -->
+        <footer style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #4a5568;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div style="font-size: 0.875rem; color: #a0aec0;">
+              <p>最后更新: {{ formatDate(article.date) }}</p>
+            </div>
 
-    <!-- 错误状态 -->
-    <div v-else class="text-center py-12">
-      <h1 class="text-2xl font-bold text-gray-900 mb-4">文章未找到</h1>
-      <p class="text-gray-600 mb-8">抱歉，您访问的文章不存在或已被删除。</p>
-      <NuxtLink 
-        to="/" 
-        class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200"
-      >
-        返回首页
-      </NuxtLink>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <NuxtLink
+                to="/"
+                style="color: #63b3ed; text-decoration: none; font-weight: 500; transition: all 0.2s ease; padding: 0.5rem 1rem; border: 1px solid #63b3ed; border-radius: 6px;"
+                @mouseover="$event.target.style.background = 'rgba(99, 179, 237, 0.1)'"
+                @mouseout="$event.target.style.background = 'transparent'"
+              >
+                查看更多文章
+              </NuxtLink>
+            </div>
+          </div>
+        </footer>
+      </article>
+
+      <!-- 加载状态 -->
+      <div v-else-if="pending" style="text-align: center; padding: 3rem 0;">
+        <div style="width: 3rem; height: 3rem; border: 2px solid #4a5568; border-top: 2px solid #63b3ed; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+        <p style="margin-top: 1rem; color: #f7fafc; font-weight: 500;">加载中...</p>
+      </div>
+
+      <!-- 错误状态 -->
+      <div v-else style="text-align: center; padding: 3rem 0;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">📄</div>
+        <h1 style="font-size: 1.5rem; font-weight: 700; color: #ffffff; margin-bottom: 1rem;">文章未找到</h1>
+        <p style="color: #a0aec0; margin-bottom: 2rem;">抱歉，您访问的文章不存在或已被删除。</p>
+        <NuxtLink
+          to="/"
+          style="display: inline-block; background: linear-gradient(45deg, #63b3ed, #68d391); color: #1a202c; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; transition: transform 0.2s ease;"
+          @mouseover="$event.target.style.transform = 'scale(1.05)'"
+          @mouseout="$event.target.style.transform = 'scale(1)'"
+        >
+          返回首页
+        </NuxtLink>
+      </div>
     </div>
   </div>
 </template>
@@ -94,39 +117,56 @@ const slug = route.params.slug
 // 构建文章路径
 const articlePath = Array.isArray(slug) ? `/blog/${slug.join('/')}` : `/blog/${slug}`
 
-// 获取文章内容 - 使用最新的 Nuxt Content 3 语法
-const { data: article, pending } = await useAsyncData(`article-${articlePath}`, async () => {
+// 获取文章内容 - 使用 Nuxt Content 3 标准 API
+const { data: article, pending, error } = await useAsyncData(`article-${articlePath}`, async () => {
   try {
-    console.log(`开始使用 queryCollection 查询文章: ${slug}`)
+    console.log(`使用 Nuxt Content 3 查询文章: ${articlePath}`)
 
-    // 直接使用 queryCollection 查询单篇文章
+    // 使用 Nuxt Content 3 的标准查询方式
     const result = await queryCollection('blog')
       .path(articlePath)
       .first()
 
-    console.log('queryCollection 查询文章结果:', result)
+    if (!result) {
+      console.warn(`文章未找到: ${articlePath}`)
+      return null
+    }
+
+    console.log('查询到的文章:', {
+      title: result.title,
+      path: result.path,
+      date: result.date,
+      category: result.category
+    })
 
     return result
   } catch (err) {
-    console.error('queryCollection 查询文章错误:', err)
-    console.error('错误详情:', err.message)
+    console.error('查询文章时发生错误:', err)
+    console.error('错误详情:', {
+      message: err.message,
+      stack: err.stack,
+      articlePath
+    })
 
-    // 如果 queryCollection 失败，回退到 API 方式
-    try {
-      console.log('回退到 API 查询方式...')
-      const response = await $fetch(`/api/blog/${slug}`)
-      return response?.success ? response.data : null
-    } catch (apiErr) {
-      console.error('API 查询也失败:', apiErr)
-      return null
-    }
+    return null
   }
 })
 
-// 不再需要自定义 Markdown 渲染器，使用 Nuxt Content 3 的 ContentRenderer
+// 分类配置 - 与首页保持一致
+const categoryConfig = {
+  '全部': { icon: '📚', color: '#63b3ed' },
+  '方案设计': { icon: '🏗️', color: '#68d391' },
+  '技术说明': { icon: '⚙️', color: '#f6ad55' },
+  'AI相关': { icon: '🤖', color: '#ed64a6' }
+}
+
+// 获取分类信息
+const getCategoryInfo = (category) => {
+  return categoryConfig[category] || categoryConfig['全部']
+}
 
 // 如果文章不存在，抛出 404 错误
-if (!article.value && !pending.value) {
+if (!article.value && !pending.value && !error.value) {
   throw createError({
     statusCode: 404,
     statusMessage: '文章未找到'
@@ -190,226 +230,153 @@ const formatDate = (dateString) => {
 </script>
 
 <style>
-/* 全局基础样式 */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.6;
-  color: #333;
-}
-
-body {
-  background-color: #f8fafc;
-  min-height: 100vh;
-}
-
-/* 工具类 */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.text-center { text-align: center; }
-.font-bold { font-weight: 700; }
-.font-semibold { font-weight: 600; }
-.font-medium { font-weight: 500; }
-
-.text-sm { font-size: 0.875rem; }
-.text-lg { font-size: 1.125rem; }
-.text-xl { font-size: 1.25rem; }
-.text-2xl { font-size: 1.5rem; }
-.text-4xl { font-size: 2.25rem; }
-
-.text-gray-600 { color: #6b7280; }
-.text-gray-900 { color: #111827; }
-.text-blue-600 { color: #2563eb; }
-.text-blue-800 { color: #1e40af; }
-
-.bg-white { background-color: #ffffff; }
-.bg-blue-100 { background-color: #dbeafe; }
-.bg-blue-600 { background-color: #2563eb; }
-.bg-blue-700 { background-color: #1d4ed8; }
-
-.rounded-lg { border-radius: 0.5rem; }
-.rounded-full { border-radius: 9999px; }
-
-.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
-.px-4 { padding-left: 1rem; padding-right: 1rem; }
-.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
-.py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-.py-8 { padding-top: 2rem; padding-bottom: 2rem; }
-.py-12 { padding-top: 3rem; padding-bottom: 3rem; }
-
-.mx-auto { margin-left: auto; margin-right: auto; }
-.mb-4 { margin-bottom: 1rem; }
-.mb-8 { margin-bottom: 2rem; }
-.mt-4 { margin-top: 1rem; }
-.mt-12 { margin-top: 3rem; }
-
-.max-w-4xl { max-width: 56rem; }
-.max-w-none { max-width: none; }
-
-.flex { display: flex; }
-.inline-flex { display: inline-flex; }
-.inline-block { display: inline-block; }
-.items-center { align-items: center; }
-.justify-between { justify-content: space-between; }
-.flex-wrap { flex-wrap: wrap; }
-.space-x-4 > * + * { margin-left: 1rem; }
-.gap-2 { gap: 0.5rem; }
-.gap-4 { gap: 1rem; }
-
-.h-12 { height: 3rem; }
-.w-12 { width: 3rem; }
-
-.border-t { border-top: 1px solid #e5e7eb; }
-.border-b { border-bottom: 1px solid #e5e7eb; }
-.border-gray-200 { border-color: #e5e7eb; }
-.pb-8 { padding-bottom: 2rem; }
-.pt-8 { padding-top: 2rem; }
-
-.transition-colors {
-  transition-property: color, background-color, border-color;
-  transition-duration: 200ms;
-}
-
-.hover\:text-blue-800:hover { color: #1e40af; }
-.hover\:bg-blue-700:hover { background-color: #1d4ed8; }
-
 /* 动画 */
 @keyframes spin {
+  from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-.animate-spin {
-  animation: spin 1s linear infinite;
-  border-radius: 50%;
-  border: 2px solid #f3f4f6;
-  border-top: 2px solid #2563eb;
-}
-
-/* 链接样式 */
-a {
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-/* 自定义 prose 样式 */
-.prose {
-  color: #374151;
+/* ContentRenderer 暗色主题样式 */
+.content-renderer {
+  color: #ffffff;
   line-height: 1.75;
 }
 
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-  color: #111827;
+/* 标题样式 */
+.content-renderer h1,
+.content-renderer h2,
+.content-renderer h3,
+.content-renderer h4,
+.content-renderer h5,
+.content-renderer h6 {
+  color: #ffffff;
   font-weight: 600;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
-.prose h1 {
+.content-renderer h1 {
   font-size: 2.25rem;
   line-height: 2.5rem;
 }
 
-.prose h2 {
+.content-renderer h2 {
   font-size: 1.875rem;
   line-height: 2.25rem;
 }
 
-.prose h3 {
+.content-renderer h3 {
   font-size: 1.5rem;
   line-height: 2rem;
 }
 
-.prose p {
+/* 段落样式 */
+.content-renderer p {
   margin-bottom: 1.25rem;
+  color: #ffffff;
+  opacity: 0.9;
 }
 
-.prose ul,
-.prose ol {
+/* 列表样式 */
+.content-renderer ul,
+.content-renderer ol {
   margin-bottom: 1.25rem;
   padding-left: 1.5rem;
+  color: #ffffff;
 }
 
-.prose li {
+.content-renderer li {
   margin-bottom: 0.5rem;
 }
 
-.prose code {
-  background-color: #f3f4f6;
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
+/* 代码样式 */
+.content-renderer code {
+  background-color: rgba(45, 55, 72, 0.8);
+  color: #e2e8f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
   font-size: 0.875rem;
-  color: #dc2626;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
 }
 
-.prose pre {
-  background-color: #1f2937;
-  color: #f9fafb;
-  padding: 1rem;
-  border-radius: 0.5rem;
+.content-renderer pre {
+  background-color: #2d3748;
+  color: #e2e8f0;
+  padding: 1.5rem;
+  border-radius: 8px;
   overflow-x: auto;
   margin: 1.5rem 0;
+  border: 1px solid #4a5568;
 }
 
-.prose pre code {
+.content-renderer pre code {
   background-color: transparent;
   color: inherit;
   padding: 0;
 }
 
-.prose blockquote {
-  border-left: 4px solid #3b82f6;
+/* 引用样式 */
+.content-renderer blockquote {
+  border-left: 4px solid #63b3ed;
   padding-left: 1rem;
   margin: 1.5rem 0;
   font-style: italic;
-  color: #6b7280;
+  color: #e2e8f0;
+  background: rgba(99, 179, 237, 0.1);
+  padding: 1rem;
+  border-radius: 4px;
 }
 
-.prose a {
-  color: #3b82f6;
+/* 链接样式 */
+.content-renderer a {
+  color: #63b3ed;
   text-decoration: underline;
+  transition: color 0.2s ease;
 }
 
-.prose a:hover {
-  color: #1d4ed8;
+.content-renderer a:hover {
+  color: #93c5fd;
 }
 
-.prose table {
+/* 表格样式 */
+.content-renderer table {
   width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
+  background: rgba(45, 55, 72, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.prose th,
-.prose td {
-  border: 1px solid #d1d5db;
+.content-renderer th,
+.content-renderer td {
+  border: 1px solid #4a5568;
   padding: 0.75rem;
   text-align: left;
+  color: #ffffff;
 }
 
-.prose th {
-  background-color: #f9fafb;
+.content-renderer th {
+  background-color: rgba(99, 179, 237, 0.2);
   font-weight: 600;
 }
 
-.prose img {
+/* 图片样式 */
+.content-renderer img {
   max-width: 100%;
   height: auto;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   margin: 1.5rem 0;
+  border: 1px solid #4a5568;
 }
+
+/* 分隔线样式 */
+.content-renderer hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #4a5568, transparent);
+  margin: 2rem 0;
+}
+
+
 </style>
