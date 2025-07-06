@@ -26,7 +26,7 @@
             🏠 首页
           </NuxtLink>
           <a
-            href="https://github.com"
+            href="https://github.com/TCQ1007/tcq1007.github.io"
             target="_blank"
             rel="noopener noreferrer"
             style="color: #ffffff; text-decoration: none; font-weight: 500; transition: all 0.2s ease; padding: 0.5rem 1rem; border-radius: 6px;"
