@@ -58,7 +58,7 @@
         <!-- 文章正文 -->
         <div style="max-width: none; color: #ffffff; line-height: 1.75;">
           <!-- 使用 Nuxt Content 3 的 ContentRenderer 组件 -->
-          <ContentRenderer v-if="article" :value="article" class="content-renderer" />
+          <ContentRenderer v-if="article" :value="article" />
           <div v-else style="text-align: center; padding: 2rem 0;">
             <p style="color: #a0aec0;">文章内容加载中...</p>
           </div>
@@ -289,30 +289,67 @@ const formatDate = (dateString) => {
   margin-bottom: 0.5rem;
 }
 
-/* 代码样式 */
+/* 代码样式 - 优化版本 */
 .content-renderer code {
-  background-color: rgba(45, 55, 72, 0.8);
-  color: #e2e8f0;
+  background: linear-gradient(135deg, rgba(40, 44, 52, 0.95), rgba(33, 37, 43, 0.95));
+  color: #abb2bf;
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 0.875rem;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Consolas', 'Monaco', monospace;
+  border: 1px solid rgba(86, 182, 194, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .content-renderer pre {
-  background-color: #2d3748;
-  color: #e2e8f0;
+  background: linear-gradient(135deg, #282c34, #21252b);
+  color: #abb2bf;
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow-x: auto;
-  margin: 1.5rem 0;
-  border: 1px solid #4a5568;
+  margin: 2rem 0;
+  border: 1px solid #3e4451;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.content-renderer pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #56b6c2, transparent);
 }
 
 .content-renderer pre code {
-  background-color: transparent;
+  background: transparent;
   color: inherit;
   padding: 0;
+  border: none;
+  box-shadow: none;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* 滚动条美化 */
+.content-renderer pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.content-renderer pre::-webkit-scrollbar-track {
+  background: rgba(33, 37, 43, 0.5);
+  border-radius: 4px;
+}
+
+.content-renderer pre::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #56b6c2, #61afef);
+  border-radius: 4px;
+}
+
+.content-renderer pre::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #61afef, #c678dd);
 }
 
 /* 引用样式 */
