@@ -30,8 +30,59 @@
       </div>
     </section>
 
+    <!-- 外链工具区域 -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 3rem 2rem 2rem;">
+      <div style="margin-bottom: 4rem;">
+        <h2 style="font-size: 1.75rem; font-weight: 700; color: #ffffff; margin-bottom: 2rem; text-align: center; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+          🔗 实用工具
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+          <a
+            v-for="link in externalLinks"
+            :key="link.url"
+            :href="link.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="background: linear-gradient(145deg, #2d3748, #4a5568); border: 1px solid #4a5568; border-radius: 12px; padding: 1.5rem; text-decoration: none; transition: all 0.3s ease; display: block; position: relative; overflow: hidden;"
+            @mouseover="$event.currentTarget.style.transform = 'translateY(-4px)'; $event.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.3)'"
+            @mouseout="$event.currentTarget.style.transform = 'translateY(0)'; $event.currentTarget.style.boxShadow = 'none'"
+          >
+            <!-- 图标 -->
+            <div style="font-size: 2rem; margin-bottom: 1rem;">{{ link.icon }}</div>
+
+            <!-- 标题 -->
+            <h3 style="color: #ffffff; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">
+              {{ link.title }}
+            </h3>
+
+            <!-- 描述 -->
+            <p style="color: #e2e8f0; font-size: 0.875rem; line-height: 1.5; margin-bottom: 1rem; opacity: 0.9;">
+              {{ link.description }}
+            </p>
+
+            <!-- 标签 -->
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+              <span
+                v-for="tag in link.tags"
+                :key="tag"
+                style="padding: 0.25rem 0.5rem; background: rgba(99, 179, 237, 0.2); color: #63b3ed; font-size: 0.75rem; border-radius: 8px; border: 1px solid rgba(99, 179, 237, 0.3);"
+              >
+                {{ tag }}
+              </span>
+            </div>
+
+            <!-- 外链图标 -->
+            <div style="position: absolute; top: 1rem; right: 1rem; color: #a0aec0; font-size: 1rem;">
+              ↗
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
     <!-- 分类内容区域 -->
-    <div style="max-width: 1200px; margin: 0 auto; padding: 3rem 2rem;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem 3rem;">
       <!-- 分类导航 -->
       <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap;">
         <button
@@ -204,6 +255,17 @@ useHead({
     }
   ]
 })
+
+// 外链工具配置
+const externalLinks = ref([
+  {
+    title: 'Mermaid 图表工具',
+    description: '在线创建和编辑 Mermaid 图表，支持流程图、时序图、甘特图等多种图表类型。',
+    url: 'https://mermaid.will-tecth.workers.dev/',
+    icon: '📊',
+    tags: ['图表', 'Mermaid', '可视化', '在线工具']
+  }
+])
 
 // 获取博客文章列表 - 使用 Nuxt Content 3 标准 API
 const { data: articles, pending, error } = await useAsyncData('blog-articles', async () => {
