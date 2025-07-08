@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-06',
   devtools: { enabled: true },
-  modules: ['@nuxt/content'],
+  modules: ['@nuxt/content', '@nuxtjs/color-mode'],
 
   // GitHub Pages 部署配置
   nitro: {
@@ -18,6 +18,18 @@ export default defineNuxtConfig({
   content: {
     // 基本配置
   },
+  // 主题配置
+  colorMode: {
+    preference: 'dark', // 默认主题
+    fallback: 'dark', // 回退主题
+    hid: 'nuxt-color-mode-script',
+    globalName: '__NUXT_COLOR_MODE__',
+    componentName: 'ColorScheme',
+    classPrefix: '',
+    classSuffix: '-mode',
+    storageKey: 'nuxt-color-mode',
+  },
+
   // 确保自动导入正常工作
   imports: {
     autoImport: true,

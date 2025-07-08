@@ -440,7 +440,68 @@ const lastUpdated = computed(() => {
 2. **页脚**: 版权信息下方，全站显示
 3. **格式**: "📅 最新内容更新: 2025年1月8日"
 
-### 5. 相关文档推荐
+### 5. 主题切换系统
+
+#### 技术实现
+
+使用 **@nuxtjs/color-mode** 模块实现轻量级主题切换：
+
+```javascript
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['@nuxtjs/color-mode'],
+  colorMode: {
+    preference: 'dark',
+    fallback: 'dark',
+    classSuffix: '-mode',
+  },
+})
+```
+
+#### 主题切换组件
+
+```vue
+<!-- components/ThemeToggle.vue -->
+<template>
+  <button @click="toggleTheme" class="theme-toggle">
+    <span>{{ $colorMode.value === 'dark' ? '☀️' : '🌙' }}</span>
+  </button>
+</template>
+
+<script setup>
+const toggleTheme = () => {
+  const colorMode = useColorMode()
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+</script>
+```
+
+#### CSS 变量系统
+
+```css
+:root {
+  /* 暗色主题 */
+  --bg-primary: #0a0e27;
+  --text-primary: #ffffff;
+  --accent-blue: #63b3ed;
+}
+
+.light-mode {
+  /* 亮色主题 */
+  --bg-primary: #f7fafc;
+  --text-primary: #1a202c;
+  --accent-blue: #3182ce;
+}
+```
+
+#### 特性
+
+- **自动检测**: 检测系统主题偏好
+- **持久化**: 自动保存用户选择
+- **平滑过渡**: 0.3s 的主题切换动画
+- **SSR 支持**: 避免主题闪烁问题
+
+### 6. 相关文档推荐
 
 基于分类和标签的相关文档推荐系统。
 
@@ -474,6 +535,7 @@ const categoryConfig = {
 - ✅ **全文搜索功能**: 智能搜索系统，支持响应式设计
 - ✅ **响应式导航**: 桌面端和移动端不同的交互模式
 - ✅ **内容更新时间**: 自动显示最新文章/文档的发布时间
+- ✅ **主题切换系统**: 支持亮色/暗色主题切换，自动保存用户偏好
 
 #### 计划中功能
 

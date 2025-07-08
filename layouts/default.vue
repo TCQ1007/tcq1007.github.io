@@ -65,6 +65,9 @@
                         @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.background = 'transparent'">
                         💻 GitHub
                     </a>
+
+                    <!-- 主题切换按钮 -->
+                    <ThemeToggle />
                 </div>
             </div>
         </nav>
@@ -300,6 +303,33 @@ html, body {
     max-width: 100vw;
 }
 
+/* CSS 变量定义 */
+:root {
+    /* 暗色主题变量 */
+    --bg-primary: #0a0e27;
+    --bg-secondary: #1a202c;
+    --bg-card: linear-gradient(145deg, #2d3748, #4a5568);
+    --border-color: #4a5568;
+    --text-primary: #ffffff;
+    --text-secondary: #e2e8f0;
+    --text-muted: #a0aec0;
+    --accent-blue: #63b3ed;
+    --accent-green: #68d391;
+}
+
+/* 亮色主题变量 */
+.light-mode {
+    --bg-primary: #f7fafc;
+    --bg-secondary: #ffffff;
+    --bg-card: linear-gradient(145deg, #ffffff, #f7fafc);
+    --border-color: #e2e8f0;
+    --text-primary: #1a202c;
+    --text-secondary: #2d3748;
+    --text-muted: #718096;
+    --accent-blue: #3182ce;
+    --accent-green: #38a169;
+}
+
 /* 改善代码块的显示效果 - 适配暗色主题 */
 pre {
     background-color: #2d3748 !important;
@@ -359,18 +389,24 @@ pre code {
     display: flex;
     flex-direction: column;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #0a0e27;
+    background: var(--bg-primary);
+    transition: background 0.3s ease;
 }
 
 /* 导航栏样式 */
 .navbar {
     background: rgba(26, 32, 44, 0.95);
-    border-bottom: 1px solid #4a5568;
+    border-bottom: 1px solid var(--border-color);
     padding: 1rem 0;
     position: sticky;
     top: 0;
     z-index: 50;
     backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+}
+
+.light-mode .navbar {
+    background: rgba(255, 255, 255, 0.95);
 }
 
 .navbar-container {
