@@ -7,22 +7,19 @@ export default defineNuxtConfig({
   // GitHub Pages 部署配置
   nitro: {
     prerender: {
-      crawlLinks: true
-    }
+      crawlLinks: true,
+    },
   },
 
   // 静态生成配置
   ssr: true,
 
-  // Nuxt Content 3 配置 - 启用 MDC 语法
-  content:{
-    build: {
-      markdown: {
-        highlight: false
-    }
-  }},
+  // Nuxt Content 3 配置
+  content: {
+    // 基本配置
+  },
   // 确保自动导入正常工作
   imports: {
-    autoImport: true
+    autoImport: true,
   },
 })
