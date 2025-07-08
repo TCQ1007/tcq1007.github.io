@@ -16,26 +16,21 @@
                 </div>
             </div>
 
-            <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1;">
-                <h1
-                    style="font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem; background: linear-gradient(45deg, #63b3ed, #68d391, #f6ad55); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+            <div class="hero-content">
+                <h1 class="hero-title">
                     TCQ1007 的技术博客
                 </h1>
-                <p
-                    style="font-size: 1.25rem; margin-bottom: 2rem; color: #ffffff; font-weight: 400; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                <p class="hero-subtitle">
                     基于 Nuxt 3 和 GitHub Pages 的现代化博客平台
                 </p>
-                <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-                    <span
-                        style="padding: 0.5rem 1rem; background: rgba(99, 179, 237, 0.2); border: 1px solid #63b3ed; border-radius: 20px; font-size: 0.875rem; color: #63b3ed;">
+                <div class="hero-badges">
+                    <span class="badge badge-blue">
                         🚀 现代化
                     </span>
-                    <span
-                        style="padding: 0.5rem 1rem; background: rgba(104, 211, 145, 0.2); border: 1px solid #68d391; border-radius: 20px; font-size: 0.875rem; color: #68d391;">
+                    <span class="badge badge-green">
                         ⚡ 高性能
                     </span>
-                    <span
-                        style="padding: 0.5rem 1rem; background: rgba(246, 173, 85, 0.2); border: 1px solid #f6ad55; border-radius: 20px; font-size: 0.875rem; color: #f6ad55;">
+                    <span class="badge badge-orange">
                         🌍 GitHub Pages
                     </span>
                 </div>
@@ -88,13 +83,15 @@
         </div>
 
         <!-- 主要内容区域 -->
-        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem 3rem;">
+        <div class="main-content">
             <!-- 主栏目导航 -->
-            <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem;">
-                <UiButton @click="activeSection = 'blog'" :active="activeSection === 'blog'" size="lg" icon="📝">
+            <div class="main-nav">
+                <UiButton @click="activeSection = 'blog'" :active="activeSection === 'blog'"
+                    :size="isMobile ? 'md' : 'lg'" icon="📝" class="main-nav-btn">
                     博客文章
                 </UiButton>
-                <UiButton @click="activeSection = 'docs'" :active="activeSection === 'docs'" size="lg" icon="📚">
+                <UiButton @click="activeSection = 'docs'" :active="activeSection === 'docs'"
+                    :size="isMobile ? 'md' : 'lg'" icon="📚" class="main-nav-btn">
                     项目文档
                 </UiButton>
             </div>
@@ -102,7 +99,7 @@
             <!-- 博客文章区域 -->
             <div v-show="activeSection === 'blog'">
                 <!-- 分类导航 -->
-                <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap;">
+                <div class="category-nav">
                     <UiButton v-for="category in categories" :key="category.name"
                         @click="activeCategory = category.name" :active="activeCategory === category.name"
                         :primary-color="category.color" :icon="category.icon" size="md">
@@ -289,6 +286,31 @@ const { data: docs } = await useAsyncData('docs', async () => {
 // 主栏目切换状态
 const activeSection = ref('blog')
 
+// 移动端检测
+const isMobile = ref(false)
+
+// 检测屏幕尺寸
+const checkMobile = () => {
+    if (typeof window !== 'undefined') {
+        isMobile.value = window.innerWidth <= 768
+    }
+}
+
+// 在客户端挂载时检测
+onMounted(() => {
+    checkMobile()
+    if (typeof window !== 'undefined') {
+        window.addEventListener('resize', checkMobile)
+    }
+})
+
+// 清理事件监听器
+onUnmounted(() => {
+    if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', checkMobile)
+    }
+})
+
 // 分类管理
 const activeCategory = ref('全部')
 
@@ -461,10 +483,149 @@ const getCategoryInfo = (category) => {
     left: 100%;
 }
 
+/* Hero Section 样式 */
+.hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #63b3ed, #68d391, #f6ad55);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    font-weight: 400;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    line-height: 1.4;
+}
+
+.hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid;
+    transition: all 0.3s ease;
+}
+
+.badge-blue {
+    background: rgba(99, 179, 237, 0.2);
+    border-color: #63b3ed;
+    color: #63b3ed;
+}
+
+.badge-green {
+    background: rgba(104, 211, 145, 0.2);
+    border-color: #68d391;
+    color: #68d391;
+}
+
+.badge-orange {
+    background: rgba(246, 173, 85, 0.2);
+    border-color: #f6ad55;
+    color: #f6ad55;
+}
+
+.badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 导航样式 */
+.main-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.category-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.main-nav-btn {
+    min-width: 120px;
+    white-space: nowrap;
+}
+
+/* 主内容区域 */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
+    .main-content {
+        padding: 0 1rem 2rem;
+    }
+
+    .hero-content {
+        padding: 0 1rem;
+    }
+
     .hero-title {
-        font-size: 2.5rem !important;
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-badges {
+        gap: 0.75rem;
+    }
+
+    .badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .main-nav {
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+        padding: 0 1rem;
+    }
+
+    .main-nav-btn {
+        min-width: 100px;
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    .category-nav {
+        gap: 0.5rem;
+        margin-bottom: 2rem;
     }
 
     .category-grid {
@@ -473,6 +634,46 @@ const getCategoryInfo = (category) => {
 
     .article-grid {
         grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 0 0.75rem 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .hero-badges {
+        gap: 0.5rem;
+    }
+
+    .badge {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+    }
+
+    .main-nav {
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .main-nav-btn {
+        min-width: 90px;
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .category-nav {
+        gap: 0.4rem;
+        margin-bottom: 1.5rem;
     }
 }
 

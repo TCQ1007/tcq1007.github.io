@@ -318,7 +318,77 @@ useHead({
 
 ## 🔍 搜索和导航
 
-### 1. 分类过滤
+### 1. 智能搜索系统
+
+#### 搜索功能特性
+
+- **全文搜索**: 支持标题、描述、标签、分类的全文检索
+- **实时搜索**: 输入时即时显示搜索结果
+- **响应式设计**: 桌面端和移动端不同的交互模式
+
+#### 桌面端搜索体验
+
+```javascript
+// 桌面端搜索展开功能
+const searchFocused = ref(false)
+
+const handleSearchFocus = () => {
+  searchFocused.value = true
+  showSearchResults.value = true
+}
+
+// 搜索框向左延伸到400px
+.search-input-container.desktop-expanded .search-input {
+  width: 400px;
+  transform-origin: right center;
+}
+```
+
+**桌面端特性**:
+
+- 点击搜索框向左延伸到400px宽
+- 右侧位置保持固定，不影响导航按钮
+- 搜索结果列表与搜索框宽度匹配
+- 显示更多搜索结果描述内容
+
+#### 移动端搜索体验
+
+```javascript
+// 移动端全屏搜索
+const expandSearch = () => {
+  searchExpanded.value = true
+  // 防止页面滚动
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = 'hidden'
+  }
+}
+```
+
+**移动端特性**:
+
+- 搜索按钮点击后全屏展开
+- 固定定位覆盖整个屏幕
+- 自动聚焦输入框
+- 支持ESC键和关闭按钮收起
+
+#### 搜索算法实现
+
+```javascript
+const handleSearch = () => {
+  const query = searchQuery.value.toLowerCase().trim()
+
+  searchResults.value = allArticles.value.filter((article) => {
+    return (
+      article.title?.toLowerCase().includes(query) ||
+      article.description?.toLowerCase().includes(query) ||
+      article.tags?.some((tag) => tag.toLowerCase().includes(query)) ||
+      article.category?.toLowerCase().includes(query)
+    )
+  })
+}
+```
+
+### 2. 分类过滤
 
 支持按文档分类进行过滤：
 
@@ -331,11 +401,11 @@ const filteredDocs = computed(() => {
 })
 ```
 
-### 2. 标签系统
+### 3. 标签系统
 
 每个文档支持多个标签，便于内容发现。
 
-### 3. 相关文档推荐
+### 4. 相关文档推荐
 
 基于分类和标签的相关文档推荐系统。
 
@@ -364,10 +434,18 @@ const categoryConfig = {
 
 ### 3. 功能扩展
 
-- 全文搜索功能
-- 文档版本管理
-- 多语言支持
-- 导出功能
+#### 已实现功能
+
+- ✅ **全文搜索功能**: 智能搜索系统，支持响应式设计
+- ✅ **响应式导航**: 桌面端和移动端不同的交互模式
+
+#### 计划中功能
+
+- 🔄 文档版本管理
+- 🔄 多语言支持
+- 🔄 导出功能
+- 🔄 搜索结果高亮
+- 🔄 搜索历史记录
 
 ## 📈 使用统计
 
