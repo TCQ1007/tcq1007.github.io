@@ -50,7 +50,7 @@
                     🔗 实用工具
                 </h2>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <UiGrid gap="1.5rem" min-width="300px">
                     <a v-for="link in externalLinks" :key="link.url" :href="link.url" target="_blank"
                         rel="noopener noreferrer"
                         style="background: linear-gradient(145deg, #2d3748, #4a5568); border: 1px solid #4a5568; border-radius: 12px; padding: 1.5rem; text-decoration: none; transition: all 0.3s ease; display: block; position: relative; overflow: hidden;"
@@ -83,7 +83,7 @@
                             ↗
                         </div>
                     </a>
-                </div>
+                </UiGrid>
             </div>
         </div>
 
@@ -91,61 +91,26 @@
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem 3rem;">
             <!-- 主栏目导航 -->
             <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem;">
-                <button @click="activeSection = 'blog'" :style="{
-                    padding: '1rem 2rem',
-                    borderRadius: '12px',
-                    border: 'none',
-                    fontWeight: '700',
-                    fontSize: '1rem',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    background: activeSection === 'blog' ? 'linear-gradient(45deg, #63b3ed, #68d391)' : 'rgba(45, 55, 72, 0.8)',
-                    color: activeSection === 'blog' ? '#1a202c' : '#e2e8f0',
-                    boxShadow: activeSection === 'blog' ? '0 8px 25px rgba(99, 179, 237, 0.3)' : 'none',
-                    transform: activeSection === 'blog' ? 'translateY(-2px)' : 'translateY(0)'
-                }">
-                    📝 博客文章
-                </button>
-                <button @click="activeSection = 'docs'" :style="{
-                    padding: '1rem 2rem',
-                    borderRadius: '12px',
-                    border: 'none',
-                    fontWeight: '700',
-                    fontSize: '1rem',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    background: activeSection === 'docs' ? 'linear-gradient(45deg, #63b3ed, #68d391)' : 'rgba(45, 55, 72, 0.8)',
-                    color: activeSection === 'docs' ? '#1a202c' : '#e2e8f0',
-                    boxShadow: activeSection === 'docs' ? '0 8px 25px rgba(99, 179, 237, 0.3)' : 'none',
-                    transform: activeSection === 'docs' ? 'translateY(-2px)' : 'translateY(0)'
-                }">
-                    📚 项目文档
-                </button>
+                <UiButton @click="activeSection = 'blog'" :active="activeSection === 'blog'" size="lg" icon="📝">
+                    博客文章
+                </UiButton>
+                <UiButton @click="activeSection = 'docs'" :active="activeSection === 'docs'" size="lg" icon="📚">
+                    项目文档
+                </UiButton>
             </div>
 
             <!-- 博客文章区域 -->
             <div v-show="activeSection === 'blog'">
                 <!-- 分类导航 -->
                 <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap;">
-                    <button v-for="category in categories" :key="category.name" @click="activeCategory = category.name"
-                        :style="{
-                            padding: '0.75rem 1.5rem',
-                            borderRadius: '8px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontWeight: '600',
-                            fontSize: '0.875rem',
-                            transition: 'all 0.3s ease',
-                            background: activeCategory === category.name ? category.color : 'rgba(45, 55, 72, 0.8)',
-                            color: activeCategory === category.name ? '#1a202c' : '#e2e8f0',
-                            boxShadow: activeCategory === category.name ? `0 4px 12px ${category.color}40` : 'none'
-                        }">
-                        {{ category.icon }} {{ category.name }}
-                        <span
-                            style="margin-left: 0.5rem; padding: 0.25rem 0.5rem; background: rgba(0,0,0,0.2); border-radius: 12px; font-size: 0.75rem;">
+                    <UiButton v-for="category in categories" :key="category.name"
+                        @click="activeCategory = category.name" :active="activeCategory === category.name"
+                        :primary-color="category.color" :icon="category.icon" size="md">
+                        {{ category.name }}
+                        <UiBadge :color="'rgba(0,0,0,0.6)'" size="sm" :custom-style="{ marginLeft: '0.5rem' }">
                             {{ category.count }}
-                        </span>
-                    </button>
+                        </UiBadge>
+                    </UiButton>
                 </div>
 
                 <!-- 加载状态 -->
@@ -176,10 +141,10 @@
                         </span>
                     </h2>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+                    <UiGrid gap="1.5rem" min-width="350px">
                         <ContentCard v-for="article in filteredArticles" :key="article.path" :content="article"
                             type="blog" />
-                    </div>
+                    </UiGrid>
                 </div>
 
                 <!-- 空状态 -->
@@ -210,10 +175,9 @@
                 </h2>
 
                 <!-- 文档列表 -->
-                <div v-if="docs && docs.length"
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+                <UiGrid v-if="docs && docs.length" gap="1.5rem" min-width="350px">
                     <ContentCard v-for="doc in docs" :key="doc.path" :content="doc" type="docs" />
-                </div>
+                </UiGrid>
 
                 <!-- 文档空状态 -->
                 <div v-else style="text-align: center; padding: 4rem 0;">
