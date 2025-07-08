@@ -101,6 +101,12 @@
                 <p style="color: #ffffff; font-size: 0.875rem; margin: 0; opacity: 0.7;">
                     © 2025 TCQ1007 的技术博客. 基于现代化技术栈构建.
                 </p>
+                <p style="color: #a0aec0; font-size: 0.75rem; margin: 0.5rem 0 0 0; opacity: 0.6;">
+                    📅 最新内容更新: {{ lastUpdated }}
+                </p>
+                <p style="color: #a0aec0; font-size: 0.75rem; margin: 0.5rem 0 0 0; opacity: 0.6;">
+                    最后更新: {{ lastUpdated }}
+                </p>
             </div>
         </footer>
     </div>
@@ -181,6 +187,34 @@ const { data: allArticles } = await useAsyncData('search-articles', async () => 
         console.error('获取文章失败:', error)
         return []
     }
+})
+
+// 获取所有文档
+const { data: allDocs } = await useAsyncData('all-docs', async () => {
+    try {
+        const result = await queryCollection('docs').all()
+        return result || []
+    } catch (error) {
+        console.error('获取文档失败:', error)
+        return []
+    }
+})
+
+// 计算最新更新时间
+const lastUpdated = computed(() => {
+    const allContent = [...(allArticles.value || []), ...(allDocs.value || [])]
+    if (allContent.length === 0) return '暂无内容'
+
+    const latestDate = allContent.reduce((latest, item) => {
+        const itemDate = new Date(item.date)
+        return itemDate > latest ? itemDate : latest
+    }, new Date(0))
+
+    return latestDate.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    })
 })
 
 // 搜索处理函数

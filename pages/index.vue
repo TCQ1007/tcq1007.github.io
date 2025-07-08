@@ -84,6 +84,13 @@
 
         <!-- 主要内容区域 -->
         <div class="main-content">
+            <!-- 内容更新信息 -->
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <p style="color: #a0aec0; font-size: 0.875rem; opacity: 0.8;">
+                    📅 最新内容更新: {{ lastUpdated }}
+                </p>
+            </div>
+
             <!-- 主栏目导航 -->
             <div class="main-nav">
                 <UiButton @click="activeSection = 'blog'" :active="activeSection === 'blog'"
@@ -281,6 +288,23 @@ const { data: docs } = await useAsyncData('docs', async () => {
         console.error('查询文档时发生错误:', error)
         return []
     }
+})
+
+// 计算最新更新时间
+const lastUpdated = computed(() => {
+    const allContent = [...(articles.value || []), ...(docs.value || [])]
+    if (allContent.length === 0) return '暂无内容'
+
+    const latestDate = allContent.reduce((latest, item) => {
+        const itemDate = new Date(item.date)
+        return itemDate > latest ? itemDate : latest
+    }, new Date(0))
+
+    return latestDate.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    })
 })
 
 // 主栏目切换状态

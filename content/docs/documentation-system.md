@@ -1,7 +1,7 @@
 ---
 title: '博客系统技术文档'
 description: '详细介绍博客系统的完整架构、组件设计、技术实现和最佳实践'
-date: '2025-01-08'
+date: '2025-07-08'
 category: '技术文档'
 tags: ['博客系统', 'Nuxt Content 3', 'Vue 3', '组件化', '架构设计']
 author: 'TCQ1007'
@@ -405,7 +405,42 @@ const filteredDocs = computed(() => {
 
 每个文档支持多个标签，便于内容发现。
 
-### 4. 相关文档推荐
+### 4. 内容更新时间显示
+
+#### 功能特性
+
+- **自动计算**: 遍历所有博客文章和文档，找出最新的发布时间
+- **多处显示**: 在首页和页脚都显示最新更新时间
+- **实时更新**: 当有新内容发布时，时间会自动更新
+
+#### 实现原理
+
+```javascript
+// 计算最新更新时间
+const lastUpdated = computed(() => {
+  const allContent = [...(allArticles.value || []), ...(allDocs.value || [])]
+  if (allContent.length === 0) return '暂无内容'
+
+  const latestDate = allContent.reduce((latest, item) => {
+    const itemDate = new Date(item.date)
+    return itemDate > latest ? itemDate : latest
+  }, new Date(0))
+
+  return latestDate.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+})
+```
+
+#### 显示位置
+
+1. **首页**: 主栏目导航上方，居中显示
+2. **页脚**: 版权信息下方，全站显示
+3. **格式**: "📅 最新内容更新: 2025年1月8日"
+
+### 5. 相关文档推荐
 
 基于分类和标签的相关文档推荐系统。
 
@@ -438,6 +473,7 @@ const categoryConfig = {
 
 - ✅ **全文搜索功能**: 智能搜索系统，支持响应式设计
 - ✅ **响应式导航**: 桌面端和移动端不同的交互模式
+- ✅ **内容更新时间**: 自动显示最新文章/文档的发布时间
 
 #### 计划中功能
 
