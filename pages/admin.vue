@@ -406,14 +406,27 @@ const saveArticle = async () => {
     let filename = editingArticle.value?.path?.split('/').pop()
 
     if (!filename) {
-      // 生成新文件名 - 支持中文
-      let baseFilename = articleForm.value.title
-        .trim()
-        .replace(/\s+/g, '-')                    // 空格转连字符
-        .replace(/[<>:"/\\|?*]/g, '')           // 移除文件系统不允许的字符
-        .replace(/\.+$/g, '')                   // 移除结尾的点
-        .replace(/^-+|-+$/g, '')                // 移除开头和结尾的连字符
-        .substring(0, 100)                      // 限制长度
+      // 生成新文件名 - 智能处理中文
+      let baseFilename = articleForm.value.title.trim()
+
+      // 如果标题包含中文，使用拼音或保持中文
+      if (/[\u4e00-\u9fff]/.test(baseFilename)) {
+        // 包含中文字符，保持原样但做安全处理
+        baseFilename = baseFilename
+          .replace(/\s+/g, '-')                    // 空格转连字符
+          .replace(/[<>:"/\\|?*]/g, '')           // 移除文件系统不允许的字符
+          .replace(/\.+$/g, '')                   // 移除结尾的点
+          .replace(/^-+|-+$/g, '')                // 移除开头和结尾的连字符
+          .substring(0, 50)                       // 中文文件名限制更短
+      } else {
+        // 纯英文，转小写并处理
+        baseFilename = baseFilename
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, '')
+          .replace(/^-+|-+$/g, '')
+          .substring(0, 100)
+      }
 
       // 如果处理后的文件名为空，使用默认名称
       if (!baseFilename) {

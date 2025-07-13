@@ -8,7 +8,13 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
+      // 忽略受保护的管理页面
+      ignore: ['/admin', '/editor']
     },
+    // 支持中文文件名
+    experimental: {
+      wasm: true
+    }
   },
 
   // 静态生成配置
@@ -16,7 +22,7 @@ export default defineNuxtConfig({
 
   // Nuxt Content 3 配置
   content: {
-    // 基本配置
+
   },
   // 主题配置
   colorMode: {
@@ -33,6 +39,27 @@ export default defineNuxtConfig({
   // 确保自动导入正常工作
   imports: {
     autoImport: true,
+  },
+
+  // Vite 配置 - 支持中文文件名
+  vite: {
+    server: {
+      fs: {
+        allow: ['..']
+      }
+    },
+    build: {
+      rollupOptions: {
+        external: [],
+        output: {
+          // 确保中文文件名正确处理
+          sanitizeFileName: (name) => {
+            // 保留中文字符，只移除文件系统不允许的字符
+            return name.replace(/[<>:"/\\|?*]/g, '_')
+          }
+        }
+      }
+    }
   },
 
   // 运行时配置
