@@ -212,6 +212,18 @@
 
 <script setup>
 
+// 检查是否为生产环境
+const config = useRuntimeConfig()
+const isProduction = config.public.NODE_ENV === 'production'
+
+// 如果是生产环境，抛出 404 错误
+if (isProduction) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Page not found'
+  })
+}
+
 // 页面元数据
 useHead({
   title: '博客管理后台 - TCQ007 的技术博客',
@@ -391,8 +403,25 @@ const saveArticle = async () => {
       category: articleForm.value.category
     }
 
-    let filename = editingArticle.value?.path?.split('/').pop() ||
-                   `${articleForm.value.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}.md`
+    let filename = editingArticle.value?.path?.split('/').pop()
+
+    if (!filename) {
+      // 生成新文件名 - 支持中文
+      let baseFilename = articleForm.value.title
+        .trim()
+        .replace(/\s+/g, '-')                    // 空格转连字符
+        .replace(/[<>:"/\\|?*]/g, '')           // 移除文件系统不允许的字符
+        .replace(/\.+$/g, '')                   // 移除结尾的点
+        .replace(/^-+|-+$/g, '')                // 移除开头和结尾的连字符
+        .substring(0, 100)                      // 限制长度
+
+      // 如果处理后的文件名为空，使用默认名称
+      if (!baseFilename) {
+        baseFilename = `article-${Date.now()}`
+      }
+
+      filename = `${baseFilename}.md`
+    }
 
     // 确保文件名包含 .md 扩展名
     if (!filename.endsWith('.md')) {

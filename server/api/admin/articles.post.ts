@@ -22,6 +22,14 @@ interface ApiResponse {
 }
 
 export default defineEventHandler(async (event): Promise<ApiResponse> => {
+  // 检查是否为生产环境
+  if (process.env.NODE_ENV === 'production') {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Not Found'
+    })
+  }
+
   try {
     const body = await readBody(event) as RequestBody
     const { frontmatter, content, filename, action } = body

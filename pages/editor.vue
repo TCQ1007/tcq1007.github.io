@@ -186,6 +186,18 @@
 </template>
 
 <script setup>
+// 检查是否为生产环境
+const config = useRuntimeConfig()
+const isProduction = config.public.NODE_ENV === 'production'
+
+// 如果是生产环境，抛出 404 错误
+if (isProduction) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Page not found'
+  })
+}
+
 // 页面元数据
 useHead({
   title: 'Markdown 编辑器 - TCQ007 的技术博客',
@@ -296,7 +308,21 @@ category: '${articleMeta.value.category}'
   const blob = new Blob([fullContent], { type: 'text/markdown' })
   const url = URL.createObjectURL(blob)
   
-  const filename = `${articleMeta.value.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}.md`
+  // 生成安全的文件名 - 支持中文
+  let baseFilename = articleMeta.value.title
+    .trim()
+    .replace(/\s+/g, '-')                    // 空格转连字符
+    .replace(/[<>:"/\\|?*]/g, '')           // 移除文件系统不允许的字符
+    .replace(/\.+$/g, '')                   // 移除结尾的点
+    .replace(/^-+|-+$/g, '')                // 移除开头和结尾的连字符
+    .substring(0, 100)                      // 限制长度
+
+  // 如果处理后的文件名为空，使用默认名称
+  if (!baseFilename) {
+    baseFilename = `article-${Date.now()}`
+  }
+
+  const filename = `${baseFilename}.md`
   
   const a = document.createElement('a')
   a.href = url

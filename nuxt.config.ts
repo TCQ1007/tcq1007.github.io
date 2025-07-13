@@ -34,4 +34,20 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true,
   },
+
+  // 运行时配置
+  runtimeConfig: {
+    public: {
+      NODE_ENV: process.env.NODE_ENV
+    }
+  },
+
+  // 构建钩子
+  hooks: {
+    'build:before': () => {
+      if (process.env.NODE_ENV === 'production') {
+        console.log('🔒 生产环境构建：管理和编辑页面将被保护')
+      }
+    }
+  }
 })

@@ -59,12 +59,7 @@
                         @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.background = 'transparent'">
                         🏠 首页
                     </NuxtLink>
-                    <NuxtLink to="/editor"
-                        style="color: #ffffff; text-decoration: none; font-weight: 500; transition: all 0.2s ease; padding: 0.5rem 1rem; border-radius: 6px;"
-                        @mouseover="$event.target.style.color = '#f6ad55'; $event.target.style.background = 'rgba(246, 173, 85, 0.2)'"
-                        @mouseout="$event.target.style.color = '#ffffff'; $event.target.style.background = 'transparent'">
-                        📝 编辑器
-                    </NuxtLink>
+
                     <a href="https://github.com/TCQ1007/tcq1007.github.io" target="_blank" rel="noopener noreferrer"
                         style="color: #ffffff; text-decoration: none; font-weight: 500; transition: all 0.2s ease; padding: 0.5rem 1rem; border-radius: 6px;"
                         @mouseover="$event.target.style.color = '#68d391'; $event.target.style.background = 'rgba(104, 211, 145, 0.2)'"

@@ -197,11 +197,67 @@
                 </div>
             </div>
         </div>
+
+        <!-- 开发者快速访问入口 (仅开发环境) -->
+        <div v-if="!isProduction"
+             style="position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;">
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <NuxtLink to="/admin"
+                    style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        padding: 0.75rem 1rem;
+                        background: linear-gradient(45deg, #e53e3e, #c53030);
+                        color: #ffffff;
+                        text-decoration: none;
+                        border-radius: 50px;
+                        font-weight: 600;
+                        font-size: 0.875rem;
+                        box-shadow: 0 4px 12px rgba(229, 62, 62, 0.4);
+                        transition: all 0.3s ease;
+                        backdrop-filter: blur(10px);
+                    "
+                    @mouseover="$event.target.style.transform = 'translateY(-2px) scale(1.05)'; $event.target.style.boxShadow = '0 8px 20px rgba(229, 62, 62, 0.6)'"
+                    @mouseout="$event.target.style.transform = 'translateY(0) scale(1)'; $event.target.style.boxShadow = '0 4px 12px rgba(229, 62, 62, 0.4)'"
+                >
+                    <span>⚙️</span>
+                    <span>管理后台</span>
+                </NuxtLink>
+
+                <NuxtLink to="/editor"
+                    style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        padding: 0.75rem 1rem;
+                        background: linear-gradient(45deg, #f6ad55, #ed8936);
+                        color: #1a202c;
+                        text-decoration: none;
+                        border-radius: 50px;
+                        font-weight: 600;
+                        font-size: 0.875rem;
+                        box-shadow: 0 4px 12px rgba(246, 173, 85, 0.4);
+                        transition: all 0.3s ease;
+                        backdrop-filter: blur(10px);
+                    "
+                    @mouseover="$event.target.style.transform = 'translateY(-2px) scale(1.05)'; $event.target.style.boxShadow = '0 8px 20px rgba(246, 173, 85, 0.6)'"
+                    @mouseout="$event.target.style.transform = 'translateY(0) scale(1)'; $event.target.style.boxShadow = '0 4px 12px rgba(246, 173, 85, 0.4)'"
+                >
+                    <span>📝</span>
+                    <span>编辑器</span>
+                </NuxtLink>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
 // 移除手动导入，依赖自动导入
+
+// 检查是否为生产环境
+const config = useRuntimeConfig()
+const isProduction = config.public.NODE_ENV === 'production'
 
 // 设置页面元数据
 useHead({
