@@ -7,12 +7,38 @@
 const route = useRoute()
 const slug = route.params.slug
 
-// 构建文章路径
-const articlePath = Array.isArray(slug) ? `/blog/${slug.join('/')}` : `/blog/${slug}`
+// 构建文章路径，确保正确处理中文
+let articlePath
+if (Array.isArray(slug)) {
+    articlePath = `/blog/${slug.join('/')}`
+} else {
+    articlePath = `/blog/${slug}`
+}
+
+// 解码中文路径
+try {
+    articlePath = decodeURIComponent(articlePath)
+} catch (e) {
+    console.warn('路径解码失败:', articlePath)
+}
 
 // 获取文章内容
 const { data: article, pending } = await useAsyncData(`article-${articlePath}`, async () => {
-    const result = await queryCollection('blog').path(articlePath).first()
+    // 首先尝试按路径查询
+    let result = await queryCollection('blog').path(articlePath).first()
+
+    // 如果按路径查询失败，尝试按文件名查询（处理中文文件名问题）
+    if (!result && slug) {
+        const filename = Array.isArray(slug) ? slug[slug.length - 1] : slug
+        const decodedFilename = decodeURIComponent(filename)
+
+        const allArticles = await queryCollection('blog').all()
+        result = allArticles.find(article => {
+            const articleFilename = article.stem?.split('/').pop()
+            return articleFilename === decodedFilename || article.title === decodedFilename
+        })
+    }
+
     return result || null
 })
 

@@ -306,6 +306,19 @@ const { data: articles, pending, error } = await useAsyncData('blog-articles', a
         console.log('查询到的文章数量:', result?.length || 0)
         console.log('文章列表:', result)
 
+        // 详细检查每篇文章的路径信息
+        if (result && result.length > 0) {
+            result.forEach((article, index) => {
+                console.log(`文章 ${index + 1}:`, {
+                    title: article.title,
+                    path: article.path,
+                    _path: article._path,
+                    _file: article._file,
+                    _id: article._id
+                })
+            })
+        }
+
         // 调试分类信息
         if (result && result.length > 0) {
             console.log('文章分类信息:')

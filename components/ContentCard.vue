@@ -5,7 +5,7 @@
         minHeight: '240px'
     }" :badge="type === 'blog' ? `${getCategoryIcon(content.category)} ${content.category}` : ''"
         :badge-color="type === 'blog' ? 'linear-gradient(45deg, #63b3ed, #68d391)' : ''">
-        <NuxtLink :to="content.path"
+        <NuxtLink :to="getArticlePath(content)"
             style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
             <!-- 主要内容区域 -->
             <div style="flex: 1; display: flex; flex-direction: column;">
@@ -109,5 +109,21 @@ const getCategoryIcon = (category) => {
 // 格式化日期
 const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('zh-CN')
+}
+
+// 处理文章路径，确保中文路径正确
+const getArticlePath = (content) => {
+    let path = content.path || content._path
+
+    // 如果路径不正确（比如只是 /blog），从 stem 重建路径
+    if (!path || path === '/blog') {
+        if (content.stem) {
+            // 从 stem 重建路径: 'blog/新建文章测试' -> '/blog/新建文章测试'
+            path = '/' + content.stem
+        }
+    }
+
+    // 确保中文路径正确编码
+    return path ? encodeURI(path) : '#'
 }
 </script>

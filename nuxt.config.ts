@@ -20,10 +20,6 @@ export default defineNuxtConfig({
   // 静态生成配置
   ssr: true,
 
-  // Nuxt Content 3 配置
-  content: {
-
-  },
   // 主题配置
   colorMode: {
     preference: 'dark', // 默认主题
@@ -41,26 +37,7 @@ export default defineNuxtConfig({
     autoImport: true,
   },
 
-  // Vite 配置 - 支持中文文件名
-  vite: {
-    server: {
-      fs: {
-        allow: ['..']
-      }
-    },
-    build: {
-      rollupOptions: {
-        external: [],
-        output: {
-          // 确保中文文件名正确处理
-          sanitizeFileName: (name) => {
-            // 保留中文字符，只移除文件系统不允许的字符
-            return name.replace(/[<>:"/\\|?*]/g, '_')
-          }
-        }
-      }
-    }
-  },
+
 
   // 运行时配置
   runtimeConfig: {
